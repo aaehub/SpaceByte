@@ -1,54 +1,151 @@
 ﻿@model WebApplication1.Models.Article
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Details1";
 }
 
-<h1>Details</h1>
+<h1>Details1</h1>
 
 <div>
     <h4>Article</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Content)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Content)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Category)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AuthorID)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AuthorID)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PublicationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PublicationDate)
-        </dd>
+
     </dl>
 </div>
 <div>
+
+    <h1>CONTENTS </h1>
+    @foreach (var std in @ViewData["contents"] as IList<Content>)
+    {
+
+        if (@std.ContentType == "Image")
+        {
+
+            <h1>image</h1>
+
+            <img src="@std.content " width="500" height="600">
+            <br />
+            <hr>
+
+        }
+        if (@std.ContentType == "Video")
+        {
+
+
+
+
+
+            <source src="@std.content" type="video/mp4">
+            <h1>vid</h1>
+            <br />
+            <hr>
+        }
+        if (@std.ContentType == "Paragraph")
+        {
+
+            if (@std.content.Contains("-"))
+            {
+                <h1>@std.content</h1>
+
+            }
+            else
+
+                @std.content
+
+            <br />
+            <hr>
+
+        }
+        if (@std.ContentType == "media")
+        {
+
+
+            <iframe> @std.content</iframe>
+
+
+            <h1>API</h1>
+            <br />
+
+            <hr>
+        }
+
+    }
+
+
+
+    <form asp-action="CreateComment" style="border-top:solid;">
+        <br />
+        <label for="comment-text">add comment:</label>
+        <div class="row">
+            <div class="col-100" style="display:flex; justify-content:center;">
+
+
+
+
+
+                <textarea name="commenttext" rows="3"></textarea>
+                <button type="submit" class="btn btn-primary">Submit</button>
+
+            </div>
+
+
+
+            <input class="form-control" type="hidden" name="articleid" value=@Model.ArticleID />
+
+            <br />
+
+
+        </div>
+    </form>
+
+
+    <h1>COMMENTS </h1>
+    @foreach (var std in @ViewData["comments"] as IList<comments_details>)
+    {
+        <ul>
+            <li style="background-color:white">
+                <div style="text-align:left; color:gray">
+                    @std.Comment_Text @std.username
+                </div>
+
+            </li>
+
+        </ul>
+    }
+
+
+
     <a asp-action="Edit" asp-route-id="@Model?.ArticleID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

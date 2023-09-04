@@ -1,58 +1,88 @@
-﻿@model WebApplication1.Models.Article
-
-@{
+﻿@{
     ViewData["Title"] = "Create";
 }
 
 <h1>Create</h1>
 
-<h4>Article</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AuthorID" class="control-label"></label>
-                <input asp-for="AuthorID" class="form-control" />
-                <span asp-validation-for="AuthorID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PublicationDate" class="control-label"></label>
-                <input asp-for="PublicationDate" class="form-control" />
-                <span asp-validation-for="PublicationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+@model CreateArticleModel
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@using (Html.BeginForm("Create", "Articles", FormMethod.Post))
+{
+    <div class="section">
+        <h3>Article Information</h3>
+        <div class="form-group">
+            <label for="Title">Title:</label>
+            @Html.EditorFor(m => m.Article.Title)
+        </div>
+        <div class="form-group">
+            <label for="AuthorID">Author ID:</label>
+            @Html.EditorFor(m => m.Article.AuthorID) <!-- Assuming AuthorID is an ID or reference to the author -->
+        </div>
+        <div class="form-group">
+            <label for="Description">Description:</label>
+            @Html.EditorFor(m => m.Article.Description)
+        </div>
+        <div class="form-group">
+            <label for="Category">Category:</label>
+            @Html.EditorFor(m => m.Article.Category)
+        </div>
+        <div class="form-group">
+            <label for="Content">Content:</label>
+            @Html.EditorFor(m => m.Article.Content)
+        </div>
+    </div>
+
+    <div id="contentSections" class="section">
+        <h3>Contents</h3>
+        @for (int i = 0; i < Model.Contents.Count; i++)
+        {
+            <div class="contentSection">
+                <h4>Content @i</h4>
+                <div class="form-group">
+                    <label for="Content">Content:</label>
+                    @Html.EditorFor(m => m.Contents[i].content)
+                </div>
+                <div class="form-group">
+                    <label for="ContentType">Content Type:</label>
+                    @Html.EditorFor(m => m.Contents[i].ContentType)
+                </div>
+                <div class="form-group">
+                    <label for="OrderNumber">Order Number:</label>
+                    @Html.EditorFor(m => m.Contents[i].OrderNumber)
+                </div>
+            </div>
+        }
+    </div>
+    <button type="button" id="addContent" class="btn btn-primary">Add Content</button>
+    <input type="submit" value="Save" class="btn btn-primary" />
+}
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            var contentCount = @Model.Contents.Count;
+
+            $("#addContent").click(function () {
+                var contentSection = `
+                            <div class="contentSection">
+                                <h4>Paragraph ${contentCount}</h4>
+                                <div class="form-group">
+                                    <label for="Content">Content:</label>
+                                    <input type="text" name="Contents[${contentCount}].Content" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="ContentType">Content Type:</label>
+                                    <input type="text" name="Contents[${contentCount}].ContentType" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="OrderNumber">Order Number:</label>
+                                    <input type="text" name="Contents[${contentCount}].OrderNumber" class="form-control" />
+                                </div>
+                            </div>`;
+
+                $("#contentSections").append(contentSection);
+                contentCount++;
+            });
+        });
+    </script>
 }

@@ -19,5 +19,10 @@ namespace WebApplication1.Data
         public DbSet<WebApplication1.Models.Article>? Article { get; set; }
 
         public DbSet<WebApplication1.Models.Comment>? Comment { get; set; }
+
+        public DbSet<WebApplication1.Models.Content>? Content { get; set; }
+
+
+
     }
 }
