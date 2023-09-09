@@ -1,0 +1,61 @@
+﻿
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+
+<body style="background-color: lightgrey; color: white">
+    <div style="
+        display: grid;
+        justify-content: center;
+
+        border-radius: 25px;
+        background-color: rgba(26, 26, 26, 0.533);
+        margin: 0 30%;
+        padding: 5%;
+        margin-top:10%;
+      ">
+
+        <h2>login</h2>
+        <form asp-action="Login">
+            <div class="form-group">
+                <label class="control-label"> user Name</label><br />
+                <input name="na" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="pa" class="control-label"> user Password</label> <br />
+                <input type="password" name="pa" class="form-control" /> <br />
+            </div>
+
+            <input type="submit" value="Login" class="btn btn-primary" />
+
+            <label for="">auto login</label>
+            <input type="checkbox" value="True" id="auto" name="auto" />
+
+            <p style="color: red">@ViewData["message"]</p>
+        </form>
+
+        <label for="">
+            you dont have one ?
+            <a asp-controller="User" asp-action="register">
+                create account
+            </a>
+        </label>
+    </div>
+</body>
+</html>
+@section Scripts {
+    @{
+        await
+    Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+ }

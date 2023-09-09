@@ -1,0 +1,75 @@
+﻿@model WebApplication1.Models.User
+
+@{
+    ViewData["Title"] = "register";
+}
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <h1>Register</h1>
+
+    <h4>User</h4>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="register">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Username" class="control-label"></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input type="password" asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <div>
+                            <label asp-for="Gender" class="control-label">Gender</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label> <input type="radio" asp-for="Gender" value="male" id="rm" /> Male</label>
+                            </div>
+                            <div class="checkbox">
+                                <label> <input type="radio" asp-for="Gender" value="female" id="rf" /> Female</label>
+                            </div>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function VP() {
+            var pass1 = document.getElementById("password").value;
+            var pass2 = document.getElementById("pass2").value;
+            //check empty password field
+            if (pass1.value == pass2.value) {
+                if (pass1 == pass2) {
+                    document.getElementById("rb").disabled = false;
+                } else {
+                    document.getElementById("rb").disabled = true;
+                    document.getElementById("message").innerHTML = "Wrong confirmation";
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -159,5 +160,159 @@ namespace WebApplication1.Controllers
         {
           return (_context.User?.Any(e => e.UserID == id)).GetValueOrDefault();
         }
+
+
+
+
+
+
+
+            // GET: User/Login
+            public ActionResult Login()
+            {
+                return View();
+            }
+
+        // POST: User/Login
+        [HttpPost, ActionName("login")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> login(string na, string pa, bool auto)
+        {
+
+            var builder = WebApplication.CreateBuilder();
+            string conStr = builder.Configuration.GetConnectionString("WebApplication1Context");
+
+            //getting data from database (sql)
+            SqlConnection conn1 = new SqlConnection(conStr);
+
+
+            string sql;
+            sql = "SELECT * FROM [user] where username ='" + na + "' and  password ='" + pa + "' ";
+            SqlCommand comm = new SqlCommand(sql, conn1);
+            conn1.Open();
+            SqlDataReader reader = comm.ExecuteReader();
+
+            if (reader.Read())
+            {
+                string id = Convert.ToString((int)reader["UserID"]);
+                string na1 = (string)reader["username"];
+
+                string ro = (string)reader["role"];
+
+                string email = (string)reader["email"];
+
+
+                //session data
+              
+                reader.Close();
+                conn1.Close();
+
+
+                return RedirectToAction("customerhome", "home");
+            }
+            else
+            {
+                ViewData["Message"] = "wrong user name or password";
+
+
+
+            }
+
+            return View();
+
+        }
+
+
+        public IActionResult logout()
+        {
+            HttpContext.Session.Remove("Id");
+            HttpContext.Session.Remove("username");
+            HttpContext.Session.Remove("role");
+
+            HttpContext.Response.Cookies.Delete("username");
+            HttpContext.Response.Cookies.Delete("role");
+
+            return RedirectToAction("customerhome", "home");
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        // GET: User/Register
+        public ActionResult Register()
+            {
+                return View();
+            }
+
+        // POST: User/Register
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> register([Bind("Username,Email,Password,Gender,role,Date")] User myusers)
+        {
+
+
+
+            var builder = WebApplication.CreateBuilder();
+            string conStr = builder.Configuration.GetConnectionString("WebApplication1Context");
+            SqlConnection conn = new SqlConnection(conStr); string sql;
+            conn.Open();
+
+            Boolean flage = false;
+            sql = "select * from [user] where username = '" + myusers.Username + "'";
+            SqlCommand comm = new SqlCommand(sql, conn);
+            SqlDataReader reader = comm.ExecuteReader();
+            if (reader.Read())
+            {
+                flage = true;
+            }
+            reader.Close();
+
+            if (flage == true)
+            {
+                ViewData["message"] = "name already exists";
+
+            }
+            else
+            {
+
+                myusers.Role = "customer";
+
+                myusers.DateCreated = DateTime.Now;
+
+
+
+
+
+                _context.Add(myusers);
+
+
+
+                await _context.SaveChangesAsync();
+                //   HttpContext.Session.SetString("Id", Convert.ToString(myusers.Id));
+
+                return RedirectToAction("login", "home");
+            }
+            conn.Close();
+            return View();
+
+
+
+
+
+        }
+
+
+
+
+
     }
 }
