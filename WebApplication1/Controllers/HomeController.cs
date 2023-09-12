@@ -86,24 +86,7 @@ namespace WebApplication1.Controllers
 
 
 
-            string ss = HttpContext.Session.GetString("role");
-            if (ss == "admin" || ss == "expert")
-            {
-
-
-
-                return View();
-            }
-
-
-            else
-                HttpContext.Session.Remove("Id");
-            HttpContext.Session.Remove("username");
-            HttpContext.Session.Remove("role");
-
-            HttpContext.Response.Cookies.Delete("username");
-            HttpContext.Response.Cookies.Delete("role");
-            return RedirectToAction("login", "home");
+            return View();
 
 
         }

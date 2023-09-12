@@ -13,6 +13,9 @@ namespace WebApplication1.Models
         public string Role { get; set; }
         public DateTime DateCreated { get; set; }
 
+
+        
+
         //public virtual ICollection<Article> Articles { get; set; }
         //public virtual ICollection<Comments> Comments { get; set; }
     }

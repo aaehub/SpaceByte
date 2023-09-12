@@ -279,15 +279,14 @@ namespace WebApplication1.Controllers
             if (flage == true)
             {
                 ViewData["message"] = "name already exists";
-
+                return View();
             }
             else
             {
 
-                myusers.Role = "customer";
+                myusers.Role = "User";
 
                 myusers.DateCreated = DateTime.Now;
-
 
 
 
@@ -299,7 +298,7 @@ namespace WebApplication1.Controllers
                 await _context.SaveChangesAsync();
                 //   HttpContext.Session.SetString("Id", Convert.ToString(myusers.Id));
 
-                return RedirectToAction("login", "home");
+                return RedirectToAction("login", "users");
             }
             conn.Close();
             return View();
