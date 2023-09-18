@@ -202,6 +202,7 @@ namespace WebApplication1.Controllers
                 string email = (string)reader["email"];
 
 
+
                 //session data
               
                 reader.Close();
@@ -267,7 +268,7 @@ namespace WebApplication1.Controllers
             conn.Open();
 
             Boolean flage = false;
-            sql = "select * from [user] where username = '" + myusers.Username + "'";
+            sql = "select * from [user] where email = '" + myusers.Email + "'";
             SqlCommand comm = new SqlCommand(sql, conn);
             SqlDataReader reader = comm.ExecuteReader();
             if (reader.Read())
@@ -278,7 +279,8 @@ namespace WebApplication1.Controllers
 
             if (flage == true)
             {
-                ViewData["message"] = "name already exists";
+
+                ViewData["message"] = "Email already exists";
                 return View();
             }
             else

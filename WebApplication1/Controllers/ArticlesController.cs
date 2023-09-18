@@ -15,6 +15,10 @@ using WebApplication1.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using WebApplication1.Models; // Replace with the namespace of your models
 using Microsoft.EntityFrameworkCore; // Required for Entity Framework
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.VisualBasic;
+using System.Net.Mime;
+
 namespace WebApplication1.Controllers
 {
     public class ArticlesController : Controller
@@ -189,7 +193,218 @@ namespace WebApplication1.Controllers
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+        public ActionResult Create()
+        {
+         
+
+            return View();
+        }
+
+        ////create one content 
+        //[HttpPost]
+        //public ActionResult Create(ContentViewModel viewModel ,string content, int orderNumber, string contentType)
+        //{
+
+        //    viewModel.Article.PublicationDate = DateTime.Now;
+
+
+
+
+
+
+
+        //    // Save the article to the database
+        //    _context.Article.Add(viewModel.Article);
+        //    _context.SaveChanges();
+
+        //    var newContent = new Content
+        //    {
+
+        //        ArticleID= viewModel.Article.ArticleID,
+        //        content = content,
+        //        OrderNumber = orderNumber,
+        //        ContentType = contentType,
+        //        // Set any other properties as needed
+        //    };
+
+        //    _context.Content.Add(newContent);
+        //    // Associate the new content with the article
+
+
+        //    _context.SaveChanges();
+
+
+
+
+
+        //    // Redirect to a success page or any other appropriate action
+        //    return RedirectToAction("Index");
+        //}
+
+        //[HttpPost]
+        //public ActionResult Create2(ContentViewModel viewModel, string[] content, int[] ordernumber, string[] contenttype)
+        //{
+        //    viewModel.Article.PublicationDate = DateTime.Now;
+
+        //    // Save the article to the database
+        //    _context.Article.Add(viewModel.Article);
+        //    _context.SaveChanges();
+
+        //    // Process the content, order number, and content type arrays
+        //    for (int i = 0; i < content.Length; i++)
+        //    {
+        //        // Create a new Content object using the values from the arrays
+        //        var newContent = new Content
+        //        {
+        //            content = content[i],
+        //            OrderNumber = ordernumber[i],
+        //            ContentType = contenttype[i],
+        //            // Set any other properties as needed
+        //        };
+
+        //        // Associate the new content with the article
+        //        viewModel.Contents.Add(newContent);
+        //    }
+
+        //    // Save changes to the database
+        //    _context.SaveChanges();
+
+        //    // Redirect to a success page or any other appropriate action
+        //    return RedirectToAction("Index");
+        //}
+
+
+
+
+        [HttpPost]
+        public ActionResult Create(ContentViewModel viewModel, List<Content> contentList)
+        {
+
+            viewModel.Article.PublicationDate = DateTime.Now;
+
+
+            viewModel.Article.ContentList = contentList;
+
+            viewModel.Contents= contentList;
+
+
+            // Save the article to the database
+            _context.Article.Add(viewModel.Article);
+            _context.SaveChanges();
+
+           
+
+            // Save the new content list to the database
+            
+            _context.SaveChanges();
+
+
+            // Redirect to a success page or any other appropriate action
+            return RedirectToAction("Index");
+            }
+
+        
+
+
+
+
+
+        //[HttpPost]
+        //public IActionResult CreateContent(List<Content> contents )
+        //{
+        //    // Access the article ID
+
+
+        //    // Access the list of content inputs
+        //    List<Content> contentList = new List<Content>();
+
+        //    // Iterate over the contents and process each input
+        //    foreach (var content in contents)
+        //    {
+        //        // Access individual properties of each content input
+        //        string contentType = content.ContentType;
+        //        int orderNumber = content.OrderNumber;
+        //        string contentText = content.content;
+
+        //        // Perform further processing or save the data to your database
+
+
+        //        // Example: Creating a new Content object and saving it to the database
+        //        Content newContent = new Content
+        //        {
+        //            ArticleID = Articleid,
+        //            ContentType = contentType,
+        //            OrderNumber = orderNumber,
+        //            content = contentText,
+
+        //        };
+
+        //        // Save the new content to the database using your data access layer or ORM
+        //        // ...
+        //    }
+
+
+
+        //    var builder = WebApplication.CreateBuilder();
+        //    string conStr = builder.Configuration.GetConnectionString("WebApplication1Context");
+
+
+
+        //    SqlConnection conn = new SqlConnection(conStr);
+
+
+        //    string sql;
+
+
+
+        //    //string ss = HttpContext.Session.GetString("Id");
+        //    //int b = Convert.ToInt32(ss);
+
+        //    sql = " INSERT INTO Comment VALUES(  GETDATE() " + ", '" + commenttext + "' ," + articleid + ",  " + 1 + ")";
+
+        //    SqlCommand comm = new SqlCommand(sql, conn);
+        //    conn.Open();
+
+
+
+
+        //    comm.ExecuteNonQuery();
+        //    comm.Dispose();
+
+        //    conn.Close();
+
+
+
+
+
+        //    // Redirect to a success page or return appropriate response
+        //    return RedirectToAction("Index");
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -318,49 +533,13 @@ namespace WebApplication1.Controllers
         }
 
 
-
-
-        public ActionResult Create()
-        {
-            var viewModel = new CreateArticleModel();
-            viewModel.Article = new Article();
-            viewModel.Contents.Add(new Content());
-
-            return View(viewModel);
-        }
-        [HttpPost]
-        public ActionResult Create(CreateArticleModel viewModel)
-        { 
-            
-            viewModel.Article.PublicationDate = DateTime.Now;
-           
-            
-
-              
-               
-
-                
-                // Save the article to the database
-                _context.Article.Add(viewModel.Article);
-                   _context.SaveChanges();
         
-            // Assign the article ID to the paragraphs and save them to the database
-            foreach (var content in viewModel.Contents)
-                {
-                     content.Article = viewModel.Article;
-                    content.ArticleID = viewModel.Article.ArticleID;
-                    _context.Content.Add(content);
-                      _context.SaveChanges();
-            }
 
-              
 
-                // Redirect to a success page or any other appropriate action
-                return RedirectToAction("Index");
-            
 
-          
-        }
+
+
+
 
 
 

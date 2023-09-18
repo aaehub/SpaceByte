@@ -43,7 +43,9 @@
                     <input asp-for="Username" required class="form-control" />
                     <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
-                @ViewData["message"]
+               
+                <p style="color: red"> @ViewData["message"]</p>
+               
                 <div class="form-group">
                     <label asp-for="Email" class="control-label"></label>
                     <input asp-for="Email" required class="form-control" />

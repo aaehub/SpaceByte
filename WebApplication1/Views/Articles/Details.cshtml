@@ -44,7 +44,7 @@
     </dl>
 </div>
 <div>
-
+@*
     <h1>CONTENTS </h1>
     @foreach (var std in @ViewData["contents"] as IList<Content>)
     {
@@ -101,6 +101,65 @@
         }
 
     }
+*@
+
+
+    <h1>CONTENTS</h1>
+    @foreach (var std in @ViewData["contents"] as IList<Content>)
+    {
+        if (std.ContentType == "Image")
+        {
+            <h1>Image</h1>
+            <img src="@std.content" width="500" height="600" />
+            <br />
+            <hr>
+        }
+        else if (std.ContentType == "Video")
+        {
+            <h1>Video</h1>
+            <video width="500" height="600" controls>
+                <source src="@std.content" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+            <br />
+            <hr>
+        }
+        else if (std.ContentType == "Paragraph")
+        {
+            if (std.content.Contains("-"))
+            {
+                <h1>@std.content</h1>
+            }
+            else
+            {
+                @Html.Raw(std.content)
+            }
+            <br />
+            <hr>
+        }
+        else if (std.ContentType == "API")
+        {
+            <h1>API</h1>
+            <iframe src="@std.content"></iframe>
+            <br />
+            <hr>
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

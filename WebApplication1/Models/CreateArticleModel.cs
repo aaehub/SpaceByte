@@ -4,11 +4,13 @@
     {
 
         public Article Article { get; set; }
-        public List<Content> Contents { get; set; }
+
+        public Content content { get; set; }
+        public List<Content> ContentList { get; set; }
 
         public CreateArticleModel()
         {
-            Contents = new List<Content>();
+            ContentList = new List<Content>();
         }
     }
 }

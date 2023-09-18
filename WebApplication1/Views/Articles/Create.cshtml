@@ -4,8 +4,8 @@
 
 <h1>Create</h1>
 
-@model CreateArticleModel
-
+@model ContentViewModel
+@*
 @using (Html.BeginForm("Create", "Articles", FormMethod.Post))
 {
     <div class="section">
@@ -32,57 +32,162 @@
         </div>
     </div>
 
-    <div id="contentSections" class="section">
-        <h3>Contents</h3>
-        @for (int i = 0; i < Model.Contents.Count; i++)
-        {
-            <div class="contentSection">
-                <h4>Content @i</h4>
-                <div class="form-group">
-                    <label for="Content">Content:</label>
-                    @Html.EditorFor(m => m.Contents[i].content)
-                </div>
-                <div class="form-group">
-                    <label for="ContentType">Content Type:</label>
-                    @Html.EditorFor(m => m.Contents[i].ContentType)
-                </div>
-                <div class="form-group">
-                    <label for="OrderNumber">Order Number:</label>
-                    @Html.EditorFor(m => m.Contents[i].OrderNumber)
+
+    <form asp-action="CreateContent" style="border-top:solid;">
+        <br />
+        <label for="comment-text">Add content:</label>
+        <div class="row">
+            <div class="col-100" style="display:flex; justify-content:center;">
+                <div id="contents-container">
+                    <div class="content-input">
+                        <div class="form-group">
+                            <label for="order-number">Order Number:</label>
+                            <input type="number" name="orderNumber" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="content-type">Content Type:</label>
+                            <input type="text" name="contentType" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="content">Content:</label>
+                            <textarea name="content" rows="3"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary remove-content">Remove</button>
+                    </div>
                 </div>
             </div>
-        }
-    </div>
-    <button type="button" id="addContent" class="btn btn-primary">Add Content</button>
-    <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+
+        <button type="button" class="btn btn-primary" id="add-content">Add Content</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
 }
+*@
 
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            var contentCount = @Model.Contents.Count;
 
-            $("#addContent").click(function () {
-                var contentSection = `
-                            <div class="contentSection">
-                                <h4>Paragraph ${contentCount}</h4>
-                                <div class="form-group">
-                                    <label for="Content">Content:</label>
-                                    <input type="text" name="Contents[${contentCount}].Content" class="form-control" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="ContentType">Content Type:</label>
-                                    <input type="text" name="Contents[${contentCount}].ContentType" class="form-control" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="OrderNumber">Order Number:</label>
-                                    <input type="text" name="Contents[${contentCount}].OrderNumber" class="form-control" />
-                                </div>
-                            </div>`;
+    @using (Html.BeginForm("Create", "Articles", FormMethod.Post))
+    {
+        <div class="section">
+            <h3>Article Information</h3>
+            <div class="form-group">
+                <label for="Title">Title:</label>
+                @Html.EditorFor(m => m.Article.Title)
+            </div>
+            <div class="form-group">
+                <label for="AuthorID">Author ID:</label>
+                @Html.EditorFor(m => m.Article.AuthorID) <!-- Assuming AuthorID is an ID or reference to the author -->
+            </div>
+            <div class="form-group">
+                <label for="Description">Description:</label>
+                @Html.EditorFor(m => m.Article.Description)
+            </div>
+            <div class="form-group">
+                <label for="Category">Category:</label>
+                @Html.EditorFor(m => m.Article.Category)
+            </div>
+            <div class="form-group">
+                <label for="Content">Content:</label>
+                @Html.EditorFor(m => m.Article.Content)
+            </div>
+        </div>
 
-                $("#contentSections").append(contentSection);
-                contentCount++;
-            });
-        });
-    </script>
+
+
+<h1>Create Content</h1>
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Add Form Group Dynamically</title>
+    </head>
+    <body>
+        <div id="contentFields">
+
+            <form asp-action="CreateContent" method="post">
+              
+                @for (int i = 0; i < 0; i++)
+                {
+                  
+                    
+                    <div class="form-group">
+                        <label for="content_@i">Content @i</label>
+                        <textarea id="content_@i" name="contentList[@i].Content" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderNumber_@i">Order Number @i</label>
+                        <input id="orderNumber_@i" type="number" name="contentList[@i].OrderNumber" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contentType_@i">Content Type @i</label>
+                        <input id="contentType_@i" type="text" name="contentList[@i].ContentType" class="form-control" />
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+
+        <button type="button" onclick="addFormGroup()">Add Form Group</button>
+
+        <script>
+            var formGroupCount = 2;
+
+            function addFormGroup() {
+                formGroupCount++;
+
+                var contentFields = document.getElementById("contentFields");
+
+                var formGroup = document.createElement("div");
+                formGroup.className = "form-group";
+
+                var contentLabel = document.createElement("label");
+                contentLabel.htmlFor = "content_" + formGroupCount;
+                contentLabel.textContent = "Content " + formGroupCount;
+
+                var contentTextarea = document.createElement("textarea");
+                contentTextarea.id = "content_" + formGroupCount;
+                contentTextarea.name = "contentList[" + formGroupCount + "].Content";
+                contentTextarea.className = "form-control";
+                contentTextarea.rows = "3";
+
+                formGroup.appendChild(contentLabel);
+                formGroup.appendChild(contentTextarea);
+
+                var orderNumberLabel = document.createElement("label");
+                orderNumberLabel.htmlFor = "orderNumber_" + formGroupCount;
+                orderNumberLabel.textContent = "Order Number " + formGroupCount;
+
+                var orderNumberInput = document.createElement("input");
+                orderNumberInput.id = "orderNumber_" + formGroupCount;
+                orderNumberInput.type = "number";
+                orderNumberInput.name = "contentList[" + formGroupCount + "].OrderNumber";
+                orderNumberInput.className = "form-control";
+
+                formGroup.appendChild(orderNumberLabel);
+                formGroup.appendChild(orderNumberInput);
+
+                var contentTypeLabel = document.createElement("label");
+                contentTypeLabel.htmlFor = "contentType_" + formGroupCount;
+                contentTypeLabel.textContent = "Content Type " + formGroupCount;
+
+                var contentTypeInput = document.createElement("input");
+                contentTypeInput.id = "contentType_" + formGroupCount;
+                contentTypeInput.type = "text";
+                contentTypeInput.name = "contentList[" + formGroupCount + "].ContentType";
+                contentTypeInput.className = "form-control";
+
+                formGroup.appendChild(contentTypeLabel);
+                formGroup.appendChild(contentTypeInput);
+
+                contentFields.appendChild(formGroup);
+            }
+        </script>
+    </body>
+    </html>
+
+
+
 }
