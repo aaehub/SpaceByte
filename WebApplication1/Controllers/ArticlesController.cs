@@ -18,6 +18,8 @@ using Microsoft.EntityFrameworkCore; // Required for Entity Framework
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualBasic;
 using System.Net.Mime;
+using Newtonsoft.Json;
+using Microsoft.NET.StringTools;
 
 namespace WebApplication1.Controllers
 {
@@ -287,37 +289,84 @@ namespace WebApplication1.Controllers
 
 
 
-
         [HttpPost]
-        public ActionResult Create(ContentViewModel viewModel, List<Content> contentList)
+        public ActionResult Create(Article model)
         {
-
-            viewModel.Article.PublicationDate = DateTime.Now;
-
-
-            viewModel.Article.ContentList = contentList;
-
-            viewModel.Contents= contentList;
-
-
-            // Save the article to the database
-            _context.Article.Add(viewModel.Article);
-            _context.SaveChanges();
-
            
 
-            // Save the new content list to the database
             
+                // Create a new Article entity
+                var article = new Article
+                {
+                    Title = model.Title,
+                    Description = model.Description,
+                    Category = model.Category,
+                    AuthorID = model.AuthorID,
+                    Content = model.Content,
+                    PublicationDate = DateTime.Now,
+                    ContentList = new List<Content>()
+                };
+
+                // Add each content item to the article
+                foreach (var content in model.ContentList)
+                {
+                    var newContent = new Content
+                    {
+                       ArticleID = article.ArticleID,
+                       Article= article,
+                        OrderNumber = content.OrderNumber,
+                        content = content.content,
+                        ContentType = content.ContentType
+                    };
+
+                    article.ContentList.Add(newContent);
+                }
+
+
+            _context.Article.Add(article);
             _context.SaveChanges();
 
 
-            // Redirect to a success page or any other appropriate action
-            return RedirectToAction("Index");
-            }
 
-        
+            return RedirectToAction("Details", new { id = article.ArticleID });
+        }
 
 
+
+        //[HttpPost]
+        //public ActionResult SubmitMyData(ContentViewModel viewModel, [FromBody] List<MyParamModel> contentArray)
+        //{
+        //    viewModel.Article.PublicationDate = DateTime.Now;
+
+
+        //    // Save the article to the database
+        //    _context.Article.Add(viewModel.Article);
+        //    _context.SaveChanges();
+
+
+
+        //    // Save the new content list to the database
+
+        //    _context.SaveChanges();
+
+        //    // Do my stuff here with my parameter
+        //    return View();
+        //}
+
+   
+        //[HttpPost]
+        //public ActionResult SubmitMyData([FromBody] List<MyParamModel> contentArray)
+        //{
+        //    // Do my stuff here with my parameter
+        //    return View();
+        //}
+
+        //public class MyParamModel // #4
+        //{
+        //    public string Prop1 { get; set; }
+        //    public string Prop2 { get; set; }
+        //    public string Prop3 { get; set; }
+        //}
 
 
 

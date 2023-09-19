@@ -4,67 +4,11 @@
 
 <h1>Create</h1>
 
-@model ContentViewModel
+@model Article
 @*
-@using (Html.BeginForm("Create", "Articles", FormMethod.Post))
-{
-    <div class="section">
-        <h3>Article Information</h3>
-        <div class="form-group">
-            <label for="Title">Title:</label>
-            @Html.EditorFor(m => m.Article.Title)
-        </div>
-        <div class="form-group">
-            <label for="AuthorID">Author ID:</label>
-            @Html.EditorFor(m => m.Article.AuthorID) <!-- Assuming AuthorID is an ID or reference to the author -->
-        </div>
-        <div class="form-group">
-            <label for="Description">Description:</label>
-            @Html.EditorFor(m => m.Article.Description)
-        </div>
-        <div class="form-group">
-            <label for="Category">Category:</label>
-            @Html.EditorFor(m => m.Article.Category)
-        </div>
-        <div class="form-group">
-            <label for="Content">Content:</label>
-            @Html.EditorFor(m => m.Article.Content)
-        </div>
-    </div>
 
-
-    <form asp-action="CreateContent" style="border-top:solid;">
-        <br />
-        <label for="comment-text">Add content:</label>
-        <div class="row">
-            <div class="col-100" style="display:flex; justify-content:center;">
-                <div id="contents-container">
-                    <div class="content-input">
-                        <div class="form-group">
-                            <label for="order-number">Order Number:</label>
-                            <input type="number" name="orderNumber" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label for="content-type">Content Type:</label>
-                            <input type="text" name="contentType" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label for="content">Content:</label>
-                            <textarea name="content" rows="3"></textarea>
-                        </div>
-                        <button type="button" class="btn btn-primary remove-content">Remove</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button type="button" class="btn btn-primary" id="add-content">Add Content</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-}
 *@
-
+@*
 
     @using (Html.BeginForm("Create", "Articles", FormMethod.Post))
     {
@@ -105,8 +49,8 @@
         <div id="contentFields">
 
             <form asp-action="CreateContent" method="post">
-              
-                @for (int i = 0; i < 0; i++)
+                <button type="submit" class="btn btn-primary">Create</button>
+                @for (int i = 0; i < 1; i++)
                 {
                   
                     
@@ -126,14 +70,14 @@
                     </div>
                 }
 
-                <button type="submit" class="btn btn-primary">Create</button>
+              
             </form>
         </div>
 
         <button type="button" onclick="addFormGroup()">Add Form Group</button>
 
         <script>
-            var formGroupCount = 2;
+            var formGroupCount = 0;
 
             function addFormGroup() {
                 formGroupCount++;
@@ -185,9 +129,193 @@
                 contentFields.appendChild(formGroup);
             }
         </script>
+
+
+      
+      
     </body>
     </html>
 
 
 
+}*@@*
+@using (Html.BeginForm("Create", "Articles", FormMethod.Post))
+{
+    <div class="section">
+        <h3>Article Information</h3>
+        <div class="form-group">
+            <label for="Title">Title:</label>
+            @Html.EditorFor(m => m.Article.Title)
+        </div>
+        <div class="form-group">
+            <label for="AuthorID">Author ID:</label>
+            @Html.EditorFor(m => m.Article.AuthorID) <!-- Assuming AuthorID is an ID or reference to the author -->
+        </div>
+        <div class="form-group">
+            <label for="Description">Description:</label>
+            @Html.EditorFor(m => m.Article.Description)
+        </div>
+        <div class="form-group">
+            <label for="Category">Category:</label>
+            @Html.EditorFor(m => m.Article.Category)
+        </div>
+        <div class="form-group">
+            <label for="Content">Content:</label>
+            @Html.EditorFor(m => m.Article.Content)
+        </div>
+    </div>
+
+    <button type="button" onclick="submitForm()">Submit</button>
+
+
+
+    <h1>Create Content</h1>
+
+        <form id="contentForm">
+            <div id="contentFields">
+                <!-- Content fields will be dynamically added here -->
+            </div>
+
+           
+            <br><br>
+           
+        </form>
+
+
 }
+            <script src="~/Scripts/jquery-1.10.2.min.js" ></script>
+    <div id="inputFieldsContainer">
+        <div>
+            <input type="text" class="propInput" placeholder="Prop1">
+            <input type="text" class="propInput" placeholder="Prop2">
+            <input type="text" class="propInput" placeholder="Prop3">
+        </div>
+        </div>
+      
+    <button onclick="addNewObject()">Add Object</button>
+   
+    <script>
+        function addNewObject() {
+            var inputFieldsContainer = document.getElementById('inputFieldsContainer');
+
+            var newFieldsContainer = document.createElement('div');
+            newFieldsContainer.innerHTML = `
+              <input type="text" class="propInput" placeholder="Prop1">
+              <input type="text" class="propInput" placeholder="Prop2">
+              <input type="text" class="propInput" placeholder="Prop3">
+            `;
+
+            inputFieldsContainer.appendChild(newFieldsContainer);
+        }
+
+        function submitForm() {
+            var inputFields = document.getElementsByClassName('propInput');
+            var contentArray = [];
+
+            for (var i = 0; i < inputFields.length; i += 3) {
+                var prop1 = inputFields[i].value;
+                var prop2 = inputFields[i + 1].value;
+                var prop3 = inputFields[i + 2].value;
+
+                var newObject = { Prop1: prop1, Prop2: prop2, Prop3: prop3 };
+                contentArray.push(newObject);
+            }
+
+            $.ajax({
+                type: 'POST',
+                data: JSON.stringify(contentArray),
+                url: '@Url.Action("SubmitMyData", "articles")',
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (response) {
+                    alert('Youhou');
+                },
+                error: function (error) {
+                    alert('not good');
+                }
+            });
+        }
+    </script>
+ *@
+
+
+<h1>Create Article</h1>
+
+@using (Html.BeginForm("Create", "Articles", FormMethod.Post))
+{
+
+    <div class="section">
+        <h3>Article Information</h3>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Content)
+            @Html.TextBoxFor(m => m.Content)
+        </div>
+        <h3>Article Information</h3>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Title)
+            @Html.TextBoxFor(m => m.Title)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Description)
+            @Html.TextBoxFor(m => m.Description)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Category)
+            @Html.TextBoxFor(m => m.Category)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.AuthorID)
+            @Html.TextBoxFor(m => m.AuthorID)
+        </div>
+    </div>
+
+    <h3>Content Information</h3>
+    <div id="contentFields">
+        <!-- Content fields will be dynamically added here -->
+    </div>
+
+    <br><br>
+
+    <button type="button" onclick="addNewContent()">Add Content</button>
+
+    <br><br>
+
+    <input type="submit" value="Submit" />
+}
+
+
+<script>
+    var index = 0;
+
+    function addNewContent() {
+        var contentFields = document.getElementById('contentFields');
+
+        var newFieldsContainer = document.createElement('div');
+
+        newFieldsContainer.innerHTML = `
+                <div>
+                    <h4>Content</h4>
+                    <div class="form-group">
+                        <label for="ContentList[${index}].OrderNumber">Order Number:</label>
+                        <input type="number" name="ContentList[${index}].OrderNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="ContentList[${index}].Content">Content:</label>
+                        <textarea name="ContentList[${index}].Content"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContentList[${index}].ContentType">Content Type:</label>
+                        <input type="text" name="ContentList[${index}].ContentType">
+                    </div>
+                </div>
+            `;
+
+        contentFields.appendChild(newFieldsContainer);
+        index++;
+    }
+</script>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

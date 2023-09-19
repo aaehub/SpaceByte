@@ -12,10 +12,7 @@ namespace WebApplication1.Models
         public int AuthorID { get; set; }
 
         public DateTime PublicationDate { get; set; }
-        public Article()
-        {
-            ContentList = new List<Content>();
-        }
+      
 
         // Other properties of the Article class
 
