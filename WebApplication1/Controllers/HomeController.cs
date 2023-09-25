@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Data;
 using System.Diagnostics;
 using WebApplication1.Models;
 
@@ -7,6 +9,12 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
+
+
+    
+        
+
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -31,13 +39,12 @@ namespace WebApplication1.Controllers
         }
 
 
-
         public async Task<IActionResult> customerhome()
         {
 
+            
 
-
-            List<Article> li = new List<Article>();
+                List<Article> li = new List<Article>();
 
 
             var builder = WebApplication.CreateBuilder();
@@ -67,7 +74,7 @@ namespace WebApplication1.Controllers
                     Description = (string)reader["Description"],
                     Category = (string)reader["Category"],
                     PublicationDate = (DateTime)reader["PublicationDate"],
-                    
+
 
                 });
             }
@@ -80,13 +87,24 @@ namespace WebApplication1.Controllers
 
         }
 
+
+
+
         public async Task<IActionResult> adminhome()
         {
+            string ss = HttpContext.Session.GetString("role");
+            if (ss == "admin")
+            {
 
 
 
+                return View();
+            }
+            else {
 
-            return View();
+                return RedirectToAction("login", "users");
+
+            }
 
 
         }

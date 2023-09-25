@@ -35,10 +35,22 @@ namespace WebApplication1.Controllers
         // GET: Articles
         public async Task<IActionResult> Index()
         {
-              return _context.Article != null ? 
+
+            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
+            {
+
+
+                return _context.Article != null ?
                           View(await _context.Article.ToListAsync()) :
                           Problem("Entity set 'WebApplication1Context.Article'  is null.");
-        }
+
+            }
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
+
+            }
 
         // GET: Articles/Details/5
      
@@ -46,6 +58,8 @@ namespace WebApplication1.Controllers
       
         public List<comments_details> GetComment(int articleId)
         {
+          
+            
             List<comments_details> comments = new List<comments_details>();
 
             // Your database connection and query logic here
@@ -162,16 +176,9 @@ namespace WebApplication1.Controllers
                 contents.Add(content);
 
 
-
-
-
             }
             reader2.Close();
             conn2.Close();
-
-
-
-
 
 
 
@@ -179,12 +186,6 @@ namespace WebApplication1.Controllers
 
 
             ViewData["comments"] = comments;
-
-
-
-
-
-
 
 
             return View(article);
@@ -196,105 +197,30 @@ namespace WebApplication1.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
         public ActionResult Create()
         {
-         
 
-            return View();
-        }
+            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
+            {
 
-        ////create one content 
-        //[HttpPost]
-        //public ActionResult Create(ContentViewModel viewModel ,string content, int orderNumber, string contentType)
-        //{
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
 
-        //    viewModel.Article.PublicationDate = DateTime.Now;
+            }
 
-
-
-
-
-
-
-        //    // Save the article to the database
-        //    _context.Article.Add(viewModel.Article);
-        //    _context.SaveChanges();
-
-        //    var newContent = new Content
-        //    {
-
-        //        ArticleID= viewModel.Article.ArticleID,
-        //        content = content,
-        //        OrderNumber = orderNumber,
-        //        ContentType = contentType,
-        //        // Set any other properties as needed
-        //    };
-
-        //    _context.Content.Add(newContent);
-        //    // Associate the new content with the article
-
-
-        //    _context.SaveChanges();
-
-
-
-
-
-        //    // Redirect to a success page or any other appropriate action
-        //    return RedirectToAction("Index");
-        //}
-
-        //[HttpPost]
-        //public ActionResult Create2(ContentViewModel viewModel, string[] content, int[] ordernumber, string[] contenttype)
-        //{
-        //    viewModel.Article.PublicationDate = DateTime.Now;
-
-        //    // Save the article to the database
-        //    _context.Article.Add(viewModel.Article);
-        //    _context.SaveChanges();
-
-        //    // Process the content, order number, and content type arrays
-        //    for (int i = 0; i < content.Length; i++)
-        //    {
-        //        // Create a new Content object using the values from the arrays
-        //        var newContent = new Content
-        //        {
-        //            content = content[i],
-        //            OrderNumber = ordernumber[i],
-        //            ContentType = contenttype[i],
-        //            // Set any other properties as needed
-        //        };
-
-        //        // Associate the new content with the article
-        //        viewModel.Contents.Add(newContent);
-        //    }
-
-        //    // Save changes to the database
-        //    _context.SaveChanges();
-
-        //    // Redirect to a success page or any other appropriate action
-        //    return RedirectToAction("Index");
-        //}
-
-
+       
 
         [HttpPost]
         public ActionResult Create(Article model)
         {
-           
 
-            
+            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
+            {
+
                 // Create a new Article entity
                 var article = new Article
                 {
@@ -329,143 +255,22 @@ namespace WebApplication1.Controllers
 
 
             return RedirectToAction("Details", new { id = article.ArticleID });
+
+            }
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
         }
-
-
-
-        //[HttpPost]
-        //public ActionResult SubmitMyData(ContentViewModel viewModel, [FromBody] List<MyParamModel> contentArray)
-        //{
-        //    viewModel.Article.PublicationDate = DateTime.Now;
-
-
-        //    // Save the article to the database
-        //    _context.Article.Add(viewModel.Article);
-        //    _context.SaveChanges();
-
-
-
-        //    // Save the new content list to the database
-
-        //    _context.SaveChanges();
-
-        //    // Do my stuff here with my parameter
-        //    return View();
-        //}
-
-   
-        //[HttpPost]
-        //public ActionResult SubmitMyData([FromBody] List<MyParamModel> contentArray)
-        //{
-        //    // Do my stuff here with my parameter
-        //    return View();
-        //}
-
-        //public class MyParamModel // #4
-        //{
-        //    public string Prop1 { get; set; }
-        //    public string Prop2 { get; set; }
-        //    public string Prop3 { get; set; }
-        //}
-
-
-
-        //[HttpPost]
-        //public IActionResult CreateContent(List<Content> contents )
-        //{
-        //    // Access the article ID
-
-
-        //    // Access the list of content inputs
-        //    List<Content> contentList = new List<Content>();
-
-        //    // Iterate over the contents and process each input
-        //    foreach (var content in contents)
-        //    {
-        //        // Access individual properties of each content input
-        //        string contentType = content.ContentType;
-        //        int orderNumber = content.OrderNumber;
-        //        string contentText = content.content;
-
-        //        // Perform further processing or save the data to your database
-
-
-        //        // Example: Creating a new Content object and saving it to the database
-        //        Content newContent = new Content
-        //        {
-        //            ArticleID = Articleid,
-        //            ContentType = contentType,
-        //            OrderNumber = orderNumber,
-        //            content = contentText,
-
-        //        };
-
-        //        // Save the new content to the database using your data access layer or ORM
-        //        // ...
-        //    }
-
-
-
-        //    var builder = WebApplication.CreateBuilder();
-        //    string conStr = builder.Configuration.GetConnectionString("WebApplication1Context");
-
-
-
-        //    SqlConnection conn = new SqlConnection(conStr);
-
-
-        //    string sql;
-
-
-
-        //    //string ss = HttpContext.Session.GetString("Id");
-        //    //int b = Convert.ToInt32(ss);
-
-        //    sql = " INSERT INTO Comment VALUES(  GETDATE() " + ", '" + commenttext + "' ," + articleid + ",  " + 1 + ")";
-
-        //    SqlCommand comm = new SqlCommand(sql, conn);
-        //    conn.Open();
-
-
-
-
-        //    comm.ExecuteNonQuery();
-        //    comm.Dispose();
-
-        //    conn.Close();
-
-
-
-
-
-        //    // Redirect to a success page or return appropriate response
-        //    return RedirectToAction("Index");
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // GET: Articles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Article == null)
+
+            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
+            {
+
+                if (id == null || _context.Article == null)
             {
                 return NotFound();
             }
@@ -476,6 +281,12 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
             return View(article);
+            }
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
+
         }
 
         // POST: Articles/Edit/5
@@ -485,7 +296,11 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ArticleID,Title,Description,Content,Category,AuthorID,PublicationDate")] Article article)
         {
-            if (id != article.ArticleID)
+
+            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
+            {
+
+                if (id != article.ArticleID)
             {
                 return NotFound();
             }
@@ -511,12 +326,22 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(article);
+
+            }
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
+
         }
 
         // GET: Articles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Article == null)
+
+            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
+            {
+                if (id == null || _context.Article == null)
             {
                 return NotFound();
             }
@@ -529,6 +354,13 @@ namespace WebApplication1.Controllers
             }
 
             return View(article);
+
+            }
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
+
         }
 
 
@@ -537,8 +369,14 @@ namespace WebApplication1.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
+
+
         {
-            if (_context.Article == null)
+
+
+            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
+            {
+                if (_context.Article == null)
             {
                 return Problem("Entity set 'WebApplication1Context.Article'  is null.");
             }
@@ -574,6 +412,11 @@ namespace WebApplication1.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction("login", "users");
+            }
         }
 
         private bool ArticleExists(int id)

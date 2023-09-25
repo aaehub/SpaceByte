@@ -11,6 +11,7 @@ namespace WebApplication1.Models
         public string Password { get; set; }
         public string Gender { get; set; }
         public string Role { get; set; }
+        public Boolean Status { get; set; }
         public DateTime DateCreated { get; set; }
 
 
