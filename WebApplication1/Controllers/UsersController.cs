@@ -40,7 +40,7 @@ namespace WebApplication1.Controllers
             else
             {
 
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
 
             }
         }
@@ -71,7 +71,7 @@ namespace WebApplication1.Controllers
             else
             {
 
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
 
             }
             }
@@ -86,7 +86,7 @@ namespace WebApplication1.Controllers
             else
             {
 
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
 
             }
         }
@@ -130,7 +130,7 @@ namespace WebApplication1.Controllers
             else
             {
 
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
 
     }
 }
@@ -171,7 +171,7 @@ namespace WebApplication1.Controllers
                     return RedirectToAction(nameof(Index));
                 }
                 return View(user);
-            }else{ return RedirectToAction("login", "users");}
+            }else{ return RedirectToAction("logout", "users");}
 
 
             }
@@ -195,7 +195,7 @@ namespace WebApplication1.Controllers
 
             return View(user);
             }
-            else { return RedirectToAction("login", "users"); }
+            else { return RedirectToAction("logout", "users"); }
         }
 
     
@@ -219,7 +219,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction(nameof(Index));
 
 
-        }else{ return RedirectToAction("login", "users");
+        }else{ return RedirectToAction("logout", "users");
     }
 }
 
@@ -308,8 +308,8 @@ namespace WebApplication1.Controllers
 
 
 
-                    logout();
-                    return RedirectToAction("login", "users");
+                    
+                    return RedirectToAction("logout", "users");
                 }
 
 
@@ -408,7 +408,7 @@ namespace WebApplication1.Controllers
                 await _context.SaveChangesAsync();
                 //   HttpContext.Session.SetString("Id", Convert.ToString(myusers.Id));
                 conn.Close();
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
             }
           
 

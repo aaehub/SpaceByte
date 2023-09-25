@@ -47,7 +47,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
             }
 
             }
@@ -207,7 +207,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
             }
 
             }
@@ -259,7 +259,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
             }
         }
 
@@ -284,7 +284,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
             }
 
         }
@@ -330,7 +330,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
             }
 
         }
@@ -358,7 +358,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
             }
 
         }
@@ -415,7 +415,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                return RedirectToAction("login", "users");
+                return RedirectToAction("logout", "users");
             }
         }
 
