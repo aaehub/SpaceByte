@@ -22,31 +22,15 @@ namespace WebApplication1.Controllers
         // GET: Comments
         public async Task<IActionResult> Index()
         {
-
-            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
-            {
-                return _context.Comment != null ? 
+              return _context.Comment != null ? 
                           View(await _context.Comment.ToListAsync()) :
                           Problem("Entity set 'WebApplication1Context.Comment'  is null.");
-
-            }
-            else
-            {
-              
-                return RedirectToAction("logout", "users");
-            }
         }
 
         // GET: Comments/Details/5
         public async Task<IActionResult> Details(int? id)
-
-
         {
-
-            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
-            {
-
-                if (id == null || _context.Comment == null)
+            if (id == null || _context.Comment == null)
             {
                 return NotFound();
             }
@@ -59,25 +43,12 @@ namespace WebApplication1.Controllers
             }
 
             return View(comment);
-            }
-            else
-            {
-                return RedirectToAction("logout", "users");
-            }
         }
 
         // GET: Comments/Create
         public IActionResult Create()
         {
-
-            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("logout", "users");
-            }
+            return View();
         }
 
         // POST: Comments/Create
@@ -87,34 +58,19 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CommentID,Date,Comment_Text,ArticleID,UserID")] Comment comment)
         {
-
-            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
-            {
-                if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(comment);
-            }
-            else
-            {
-                return RedirectToAction("logout", "users");
-            }
         }
 
         // GET: Comments/Edit/5
         public async Task<IActionResult> Edit(int? id)
-
-
-
         {
-
-            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
-            {
-
-                if (id == null || _context.Comment == null)
+            if (id == null || _context.Comment == null)
             {
                 return NotFound();
             }
@@ -125,11 +81,6 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
             return View(comment);
-            }
-            else
-            {
-                return RedirectToAction("logout", "users");
-            }
         }
 
         // POST: Comments/Edit/5
@@ -137,12 +88,9 @@ namespace WebApplication1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CommentID,Date,Comment_Text,ArticleID,UserID")] Comment comment)
+        public async Task<IActionResult> Edit(int CommentID, [Bind("CommentID,Date,Comment_Text,ArticleID,UserID")] Comment comment)
         {
-
-            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
-            {
-                if (id != comment.CommentID)
+            if (CommentID != comment.CommentID)
             {
                 return NotFound();
             }
@@ -168,19 +116,12 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(comment);
-            }
-            else
-            {
-                return RedirectToAction("logout", "users");
-            }
         }
 
         // GET: Comments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
-            {
-                if (id == null || _context.Comment == null)
+            if (id == null || _context.Comment == null)
             {
                 return NotFound();
             }
@@ -193,24 +134,18 @@ namespace WebApplication1.Controllers
             }
 
             return View(comment);
-            }
-            else
-            {
-                return RedirectToAction("logout", "users");
-            }
         }
 
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int CommentID)
         {
-
             if (_context.Comment == null)
             {
                 return Problem("Entity set 'WebApplication1Context.Comment'  is null.");
             }
-            var comment = await _context.Comment.FindAsync(id);
+            var comment = await _context.Comment.FindAsync(CommentID);
             if (comment != null)
             {
                 _context.Comment.Remove(comment);
@@ -220,9 +155,9 @@ namespace WebApplication1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CommentExists(int id)
+        private bool CommentExists(int CommentID)
         {
-          return (_context.Comment?.Any(e => e.CommentID == id)).GetValueOrDefault();
+          return (_context.Comment?.Any(e => e.CommentID == CommentID)).GetValueOrDefault();
         }
     }
 }

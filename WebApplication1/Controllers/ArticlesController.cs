@@ -387,6 +387,12 @@ namespace WebApplication1.Controllers
 
             if (commentExists)
             {
+
+
+                TempData["Message"] = "you already made a comment";
+              
+                
+                
                 return RedirectToAction("Details", "articles", new { id = articleid });
 
 
@@ -399,6 +405,8 @@ namespace WebApplication1.Controllers
                 comm.ExecuteNonQuery();
                 comm.Dispose();
                 conn.Close();
+
+                TempData["Message"] = "comment created successfuly";
                 return RedirectToAction("Details", "articles", new { id = articleid});
             }
 

@@ -178,12 +178,9 @@
 
             </div>
             <br />
-            @if (!string.IsNullOrEmpty(ViewData["Message"] as string))
-            {
-                <div class="alert alert-info">
-                    @ViewData["Message"]
-                </div>
-            }
+            <div class="alert alert-info">
+                @TempData["Message"]
+            </div>
             <input class="form-control" type="hidden" name="articleid" value=@Model.ArticleID />
 
             <br />
