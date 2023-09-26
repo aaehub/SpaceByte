@@ -20,6 +20,7 @@ using Microsoft.VisualBasic;
 using System.Net.Mime;
 using Newtonsoft.Json;
 using Microsoft.NET.StringTools;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WebApplication1.Controllers
 {
@@ -180,10 +181,8 @@ namespace WebApplication1.Controllers
             reader2.Close();
             conn2.Close();
 
-
-
+          
             ViewData["contents"] = contents;
-
 
             ViewData["comments"] = comments;
 
@@ -220,14 +219,18 @@ namespace WebApplication1.Controllers
 
             string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
             {
+              
+                string SAuthorID = HttpContext.Session.GetString("UserID");
+                int AuthorID = int.Parse(SAuthorID);
 
                 // Create a new Article entity
                 var article = new Article
                 {
+
                     Title = model.Title,
                     Description = model.Description,
                     Category = model.Category,
-                    AuthorID = model.AuthorID,
+                    AuthorID = AuthorID,
                     Content = model.Content,
                     PublicationDate = DateTime.Now,
                     ContentList = new List<Content>()
@@ -263,77 +266,6 @@ namespace WebApplication1.Controllers
             }
         }
 
-        // GET: Articles/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-
-            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
-            {
-
-                if (id == null || _context.Article == null)
-            {
-                return NotFound();
-            }
-
-            var article = await _context.Article.FindAsync(id);
-            if (article == null)
-            {
-                return NotFound();
-            }
-            return View(article);
-            }
-            else
-            {
-                return RedirectToAction("logout", "users");
-            }
-
-        }
-
-        // POST: Articles/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ArticleID,Title,Description,Content,Category,AuthorID,PublicationDate")] Article article)
-        {
-
-            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
-            {
-
-                if (id != article.ArticleID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(article);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ArticleExists(article.ArticleID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(article);
-
-            }
-            else
-            {
-                return RedirectToAction("logout", "users");
-            }
-
-        }
 
         // GET: Articles/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -425,65 +357,52 @@ namespace WebApplication1.Controllers
         }
 
 
-        
 
 
-
-
-
-
-
-
-
-
+        private bool CommentExists(int id)
+        {
+            return (_context.Comment?.Any(e => e.UserID == id)).GetValueOrDefault();
+        }
 
 
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateComment(string commenttext, int articleid, int accountid)
+        public async Task<IActionResult> CreateComment(string commenttext, int articleid)
         {
-
 
 
 
 
             var builder = WebApplication.CreateBuilder();
             string conStr = builder.Configuration.GetConnectionString("WebApplication1Context");
-
-
-
             SqlConnection conn = new SqlConnection(conStr);
 
-
             string sql;
+            string ss = HttpContext.Session.GetString("UserID");
+            int id = Convert.ToInt32(ss);
+
+            bool commentExists = CommentExists(id);
+
+            if (commentExists)
+            {
+                return RedirectToAction("Details", "articles", new { id = articleid });
 
 
+            }
+            else
+            {
+                sql = "INSERT INTO Comment VALUES(GETDATE(), '" + commenttext + "', " + articleid + ", " + id + ")";
+                SqlCommand comm = new SqlCommand(sql, conn);
+                conn.Open();
+                comm.ExecuteNonQuery();
+                comm.Dispose();
+                conn.Close();
+                return RedirectToAction("Details", "articles", new { id = articleid});
+            }
 
-            //string ss = HttpContext.Session.GetString("Id");
-            //int b = Convert.ToInt32(ss);
-
-            sql = " INSERT INTO Comment VALUES(  GETDATE() " + ", '" + commenttext + "' ," + articleid + ",  " + 1+ ")";
-
-            SqlCommand comm = new SqlCommand(sql, conn);
-            conn.Open();
-
-
-
-
-            comm.ExecuteNonQuery();
-            comm.Dispose();
-
-            conn.Close();
-
-
-
-
-            return RedirectToAction("Details", "articles", new { id = articleid });
-
-
-
+           
 
         }
 

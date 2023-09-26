@@ -266,7 +266,7 @@ namespace WebApplication1.Controllers
                 string UserID = Convert.ToString((int)reader["UserID"]);
                 string name = (string)reader["Username"];
 
-                string ro = (string)reader["Role"];
+                string ro = (string)reader["role"];
 
                 string email = (string)reader["email"];
                 string Status = Convert.ToString((bool)reader["Status"]);
@@ -276,7 +276,7 @@ namespace WebApplication1.Controllers
 
                 HttpContext.Session.SetString("UserID", UserID);
                 HttpContext.Session.SetString("Username", name);
-                HttpContext.Session.SetString("Role", ro);
+                HttpContext.Session.SetString("role", ro);
                 HttpContext.Session.SetString("email", email);
                 HttpContext.Session.SetString("Status", Status);
                 reader.Close();
@@ -285,7 +285,7 @@ namespace WebApplication1.Controllers
                 {
                     HttpContext.Response.Cookies.Append("Username", name);
                     HttpContext.Response.Cookies.Append("UserID", UserID);
-                    HttpContext.Response.Cookies.Append("Role", ro);
+                    HttpContext.Response.Cookies.Append("role", ro);
                     HttpContext.Response.Cookies.Append("Status", Status);
                 }
 

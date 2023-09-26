@@ -177,9 +177,13 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
 
             </div>
-
-
-
+            <br />
+            @if (!string.IsNullOrEmpty(ViewData["Message"] as string))
+            {
+                <div class="alert alert-info">
+                    @ViewData["Message"]
+                </div>
+            }
             <input class="form-control" type="hidden" name="articleid" value=@Model.ArticleID />
 
             <br />
@@ -205,6 +209,6 @@
 
 
 
-    <a asp-action="Edit" asp-route-id="@Model?.ArticleID">Edit</a> |
+  
     <a asp-action="Index">Back to List</a>
 </div>
