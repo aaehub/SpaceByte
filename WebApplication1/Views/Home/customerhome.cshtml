@@ -20,7 +20,7 @@
             var secondArticle = Model[1];
             <div class="card card-small">
                 <h2>@secondArticle.Title</h2>
-                <img src="/images/c96ccdeb-8dfd-4b27-9d68-99f164002e01_image.png" alt="@secondArticle.Title" />
+                <img src="@secondArticle.Content" alt="@secondArticle.Title" />
                 <p>@secondArticle.Description</p>
                 <p><strong>Category:</strong> @secondArticle.Category</p>
                 <p><strong>Publication Date:</strong> @secondArticle.PublicationDate.ToShortDateString()</p>
