@@ -1,54 +1,51 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-<h3>control panel</h3>
+﻿<h1>Admin Home</h1>
 
-<div>
+<div class="controller-cards">
+    <div class="card">
+        <h2>Articles</h2>
+        <a href="/articles/Index" class="card-link">Go to Articles</a>
+    </div>
+    <div class="card">
+        <h2>Comments</h2>
+        <a href="/comments/Index" class="card-link">Go to Comments</a>
+    </div>
+    <div class="card">
+        <h2>Users</h2>
+        <a href="/users/Index" class="card-link">Go to Users</a>
+    </div>
+</div>
 
+<style>
+    .controller-cards {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
 
+    .card {
+        background-color: #f4f4f4;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        flex-basis: 30%;
+    }
 
-    <ul>
-        <li>
-            <form> <a asp-area="" asp-controller="articles1" asp-action="Index">Articles</a> <span> This part is working for Create, Delete, and Edit Articles</span></form>
-        </li>
-
-
-
-        <li>
-            <a asp-area="" asp-controller="reports" asp-action="Index">Reports</a> <span> This part is working for Report from user</span>
-        </li>
-
-        @{
-
-            var c = Context.Session.GetString("role");
-
-            if ((string)c == "admin")
-            {
-
-
-                <li>
-                    <a asp-area="" asp-controller="accounts" asp-action="Index">Accounts</a> <span> This part is working for Create, Delete, and Edit User Account</span>
-                </li>
-
-
-            }
+        .card h2 {
+            margin-bottom: 10px;
         }
 
-        <li>
-            <a asp-area="" asp-controller="comments" asp-action="Index">Comments</a> <span> This part is working for Check and Delete Comments</span>
-        </li>
+    .card-link {
+        display: block;
+        text-align: center;
+        padding: 10px;
+        background-color: #2f80ed;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
 
-    </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
+        .card-link:hover {
+            background-color: #276fd3;
+        }
+</style>

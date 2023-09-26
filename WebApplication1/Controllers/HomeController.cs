@@ -74,7 +74,7 @@ namespace WebApplication1.Controllers
                     Description = (string)reader["Description"],
                     Category = (string)reader["Category"],
                     PublicationDate = (DateTime)reader["PublicationDate"],
-
+                    Content = (string)reader["Content"]
 
                 });
             }

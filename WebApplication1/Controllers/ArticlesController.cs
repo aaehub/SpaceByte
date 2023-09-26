@@ -51,16 +51,16 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("logout", "users");
             }
 
-            }
+        }
 
         // GET: Articles/Details/5
-     
 
-      
+
+
         public List<comments_details> GetComment(int articleId)
         {
-          
-            
+
+
             List<comments_details> comments = new List<comments_details>();
 
             // Your database connection and query logic here
@@ -124,7 +124,7 @@ namespace WebApplication1.Controllers
             string conStr = builder.Configuration.GetConnectionString("WebApplication1Context");
             SqlConnection conn = new SqlConnection(conStr);
             string sql;
-            sql = "SELECT Comment.*, [User].Username AS Username FROM [User] JOIN Comment ON [User].UserID = Comment.UserID WHERE Comment.ArticleID = " + article.ArticleID+" ";
+            sql = "SELECT Comment.*, [User].Username AS Username FROM [User] JOIN Comment ON [User].UserID = Comment.UserID WHERE Comment.ArticleID = " + article.ArticleID + " ";
             SqlCommand comm = new SqlCommand(sql, conn);
 
             conn.Open();
@@ -132,7 +132,7 @@ namespace WebApplication1.Controllers
             SqlDataReader reader = comm.ExecuteReader();
 
 
-             while (reader.Read())
+            while (reader.Read())
             {
                 comments.Add(new comments_details
                 {
@@ -153,9 +153,9 @@ namespace WebApplication1.Controllers
             var builder2 = WebApplication.CreateBuilder();
             string conStr2 = builder.Configuration.GetConnectionString("WebApplication1Context");
             SqlConnection conn2 = new SqlConnection(conStr2);
-            
-           // string sql2 = "SELECT p.OrderNumber, p.Content AS Content, 'Paragraph' AS ContentType FROM Paragraph p WHERE p.ArticleID =" + article.ArticleID + " AND p.Content IS NOT NULL UNION ALL SELECT a.OrderNumber, a.VidURL AS Content, 'APIMedia' AS ContentType FROM APIMedia a WHERE a.ArticleID = " + article.ArticleID + "  AND a.VidURL IS NOT NULL UNION ALL SELECT v.OrderNumber, v.VideoURL AS Content, 'Video' AS ContentType FROM Video v WHERE v.ArticleID = " + article.ArticleID + "  AND v.VideoURL IS NOT NULL UNION ALL SELECT i.OrderNumber, i.ImageURL AS Content, 'Image' AS ContentType FROM Image i WHERE i.ArticleID = " + article.ArticleID + "  AND i.ImageURL IS NOT NULL ORDER BY OrderNumber;";
-            string sql3 = "SELECT [OrderNumber], [Content] AS Content ,[ContentType] as ContentType FROM [dbo].[Content]  WHERE [ArticleID] = "+article.ArticleID+" AND [Content] IS NOT NULL ORDER BY [OrderNumber];";
+
+            // string sql2 = "SELECT p.OrderNumber, p.Content AS Content, 'Paragraph' AS ContentType FROM Paragraph p WHERE p.ArticleID =" + article.ArticleID + " AND p.Content IS NOT NULL UNION ALL SELECT a.OrderNumber, a.VidURL AS Content, 'APIMedia' AS ContentType FROM APIMedia a WHERE a.ArticleID = " + article.ArticleID + "  AND a.VidURL IS NOT NULL UNION ALL SELECT v.OrderNumber, v.VideoURL AS Content, 'Video' AS ContentType FROM Video v WHERE v.ArticleID = " + article.ArticleID + "  AND v.VideoURL IS NOT NULL UNION ALL SELECT i.OrderNumber, i.ImageURL AS Content, 'Image' AS ContentType FROM Image i WHERE i.ArticleID = " + article.ArticleID + "  AND i.ImageURL IS NOT NULL ORDER BY OrderNumber;";
+            string sql3 = "SELECT [OrderNumber], [Content] AS Content ,[ContentType] as ContentType FROM [dbo].[Content]  WHERE [ArticleID] = " + article.ArticleID + " AND [Content] IS NOT NULL ORDER BY [OrderNumber];";
 
             SqlCommand comm2 = new SqlCommand(sql3, conn2);
             conn2.Open();
@@ -168,7 +168,7 @@ namespace WebApplication1.Controllers
                 Content content = new Content();
 
 
-               
+
                 content.content = (string)reader2["Content"];
                 content.ContentType = (string)reader2["ContentType"];
                 content.OrderNumber = (int)reader2["OrderNumber"];
@@ -181,7 +181,7 @@ namespace WebApplication1.Controllers
             reader2.Close();
             conn2.Close();
 
-          
+
             ViewData["contents"] = contents;
 
             ViewData["comments"] = comments;
@@ -209,40 +209,118 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("logout", "users");
             }
 
-            }
+        }
 
-       
+
+
+        //[HttpPost]
+        //public ActionResult Create(Article model)
+        //{
+
+        //    string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
+        //    {
+
+        //        string SAuthorID = HttpContext.Session.GetString("UserID");
+        //        int AuthorID = int.Parse(SAuthorID);
+
+        //        Create a new Article entity
+        //       var article = new Article
+        //       {
+
+        //           Title = model.Title,
+        //           Description = model.Description,
+        //           Category = model.Category,
+        //           AuthorID = AuthorID,
+        //           Content = model.Content,
+        //           PublicationDate = DateTime.Now,
+        //           ContentList = new List<Content>()
+        //       };
+
+        //        Add each content item to the article
+        //        foreach (var content in model.ContentList)
+        //        {
+        //            var newContent = new Content
+        //            {
+        //                ArticleID = article.ArticleID,
+        //                Article = article,
+        //                OrderNumber = content.OrderNumber,
+        //                content = content.content,
+        //                ContentType = content.ContentType
+        //            };
+
+        //            article.ContentList.Add(newContent);
+        //        }
+
+
+        //        _context.Article.Add(article);
+        //        _context.SaveChanges();
+
+
+
+        //        return RedirectToAction("Details", new { id = article.ArticleID });
+
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("logout", "users");
+        //    }
+        //}
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpPost]
-        public ActionResult Create(Article model)
+        public ActionResult Create(Article model,  IFormFile ArticleFile)
         {
-
-            string ss = HttpContext.Session.GetString("role"); if (ss == "admin")
+            string ss = HttpContext.Session.GetString("role");
+            if (ss == "admin")
             {
-              
                 string SAuthorID = HttpContext.Session.GetString("UserID");
                 int AuthorID = int.Parse(SAuthorID);
 
                 // Create a new Article entity
                 var article = new Article
                 {
-
                     Title = model.Title,
                     Description = model.Description,
                     Category = model.Category,
                     AuthorID = AuthorID,
-                    Content = model.Content,
                     PublicationDate = DateTime.Now,
                     ContentList = new List<Content>()
                 };
+
+               
+
+                // Save the article file
+                if (ArticleFile != null && ArticleFile.Length > 0)
+                {
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + ArticleFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        ArticleFile.CopyTo(fileStream);
+                    }
+
+                    article.Content = "/images/" + uniqueFileName;
+                }
 
                 // Add each content item to the article
                 foreach (var content in model.ContentList)
                 {
                     var newContent = new Content
                     {
-                       ArticleID = article.ArticleID,
-                       Article= article,
+                        ArticleID = article.ArticleID,
+                        Article = article,
                         OrderNumber = content.OrderNumber,
                         content = content.content,
                         ContentType = content.ContentType
@@ -251,14 +329,10 @@ namespace WebApplication1.Controllers
                     article.ContentList.Add(newContent);
                 }
 
+                _context.Article.Add(article);
+                _context.SaveChanges();
 
-            _context.Article.Add(article);
-            _context.SaveChanges();
-
-
-
-            return RedirectToAction("Details", new { id = article.ArticleID });
-
+                return RedirectToAction("Details", new { id = article.ArticleID });
             }
             else
             {
@@ -266,6 +340,105 @@ namespace WebApplication1.Controllers
             }
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //[HttpPost]
+        //public ActionResult Create(Article model, IFormFile ContentFile)
+        //{
+        //    string ss = HttpContext.Session.GetString("role");
+        //    if (ss == "admin")
+        //    {
+        //        string SAuthorID = HttpContext.Session.GetString("UserID");
+        //        int AuthorID = int.Parse(SAuthorID);
+
+        //        // Create a new Article entity
+        //        var article = new Article
+        //        {
+        //            Title = model.Title,
+        //            Description = model.Description,
+        //            Category = model.Category,
+        //            AuthorID = AuthorID,
+        //            PublicationDate = DateTime.Now,
+        //            ContentList = new List<Content>()
+        //        };
+
+        //        // Save the main article content image
+        //        if (ContentFile != null && ContentFile.Length > 0)
+        //        {
+        //            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+        //            string uniqueFileName = Guid.NewGuid().ToString() + "_" + ContentFile.FileName;
+        //            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+        //            using (var fileStream = new FileStream(filePath, FileMode.Create))
+        //            {
+        //                ContentFile.CopyTo(fileStream);
+        //            }
+
+        //            article.Content = "/images/" + uniqueFileName;
+        //        }
+
+        //        // Add each content item to the article
+        //        foreach (var content in model.ContentList)
+        //        {
+        //            var newContent = new Content
+        //            {
+        //                ArticleID = article.ArticleID,
+        //                Article = article,
+        //                OrderNumber = content.OrderNumber,
+        //                content = content.content,
+        //                ContentType = content.ContentType
+        //            };
+
+        //            article.ContentList.Add(newContent);
+        //        }
+
+        //        _context.Article.Add(article);
+        //        _context.SaveChanges();
+
+        //        return RedirectToAction("Details", new { id = article.ArticleID });
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("logout", "users");
+        //    }
+        //}
+
+        [HttpGet]
 
         // GET: Articles/Delete/5
         public async Task<IActionResult> Delete(int? id)
