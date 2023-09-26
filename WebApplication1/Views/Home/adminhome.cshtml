@@ -1,5 +1,54 @@
 ﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
+<h3>control panel</h3>
+
+<div>
+
+
+
+    <ul>
+        <li>
+            <form> <a asp-area="" asp-controller="articles1" asp-action="Index">Articles</a> <span> This part is working for Create, Delete, and Edit Articles</span></form>
+        </li>
+
+
+
+        <li>
+            <a asp-area="" asp-controller="reports" asp-action="Index">Reports</a> <span> This part is working for Report from user</span>
+        </li>
+
+        @{
+
+            var c = Context.Session.GetString("role");
+
+            if ((string)c == "admin")
+            {
+
+
+                <li>
+                    <a asp-area="" asp-controller="accounts" asp-action="Index">Accounts</a> <span> This part is working for Create, Delete, and Edit User Account</span>
+                </li>
+
+
+            }
+        }
+
+        <li>
+            <a asp-area="" asp-controller="comments" asp-action="Index">Comments</a> <span> This part is working for Check and Delete Comments</span>
+        </li>
+
+    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
