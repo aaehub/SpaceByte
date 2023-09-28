@@ -114,7 +114,7 @@
             <br />
             <hr>
         }
-        else if (std.ContentType == "Video")
+       @* else if (std.ContentType == "Video")
         {
             <h1>Video</h1>
             <video width="500" height="600" controls>
@@ -123,7 +123,7 @@
             </video>
             <br />
             <hr>
-        }
+        }*@
         else if (std.ContentType == "Paragraph")
         {
             if (std.content.Contains("-"))
@@ -208,4 +208,5 @@
 
   
     <a asp-action="Index">Back to List</a>
+    <a asp-action="Create" asp-controller="contents" asp-route-id="@Model.ArticleID" class="btn btn-secondary">Create Content</a>
 </div>

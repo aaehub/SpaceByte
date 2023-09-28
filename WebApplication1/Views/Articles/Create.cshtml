@@ -2,126 +2,38 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Create Article</h1>
 
 @model Article
 
-
-<h1>Create Article</h1>
-
 @using (Html.BeginForm("Create", "Articles", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-
     <div class="section">
         <h3>Article Information</h3>
         <div class="form-group">
-            @Html.LabelFor(m => m.Content)
+            @Html.LabelFor(m => m.Content, "Content Image")
             <input type="file" name="ArticleFile" accept="images/*" />
         </div>
 
         <div class="form-group">
             @Html.LabelFor(m => m.Title)
-            @Html.TextBoxFor(m => m.Title)
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
         </div>
+
         <div class="form-group">
             @Html.LabelFor(m => m.Description)
-            @Html.TextBoxFor(m => m.Description)
+            @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
         </div>
+
         <div class="form-group">
             @Html.LabelFor(m => m.Category)
-            @Html.TextBoxFor(m => m.Category)
+            @Html.TextBoxFor(m => m.Category, new { @class = "form-control" })
         </div>
-
     </div>
 
-    <h3>Content Information</h3>
-    <div id="contentFields">
-        <!-- Content fields will be dynamically added here -->
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+      
     </div>
-
-    <br>
-    <br>
-
-    <button type="button" onclick="addNewContent()">Add Content</button>
-
-    <br>
-    <br>
-
-    <input type="submit" value="Submit" />
 }
-
-
-<script>
-    var index = 0;
-
-    function addNewContent() {
-        var contentFields = document.getElementById('contentFields');
-
-        var newFieldsContainer = document.createElement('div');
-
-        newFieldsContainer.innerHTML = `
-                <div>
-                    <h4>Content</h4>
-                    <div class="form-group">
-                        <label for="ContentList[${index}].OrderNumber">Order Number:</label>
-                        <input type="number" name="ContentList[${index}].OrderNumber">
-                    </div>
-                    <div class="form-group">
-                        <label for="ContentList[${index}].ContentType">Content Type:</label>
-                        <select name="ContentList[${index}].ContentType" onchange="showInputField(this)">
-                            <option value="image">Image</option>
-                            <option value="paragraph">Paragraph</option>
-                            <option value="api">API</option>
-                        </select>
-                    </div>
-                    <div id="inputField_${index}" style="display: none;">
-                        <div class="form-group">
-                            <label for="ContentList[${index}].ContentFile">Image:</label>
-                            <input type="file" name="ContentList[${index}].ContentFile" accept="images/*">
-                        </div>
-                        <div class="form-group">
-                            <label for="ContentList[${index}].Content">Paragraph:</label>
-                            <textarea name="ContentList[${index}].Content"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="ContentList[${index}].API">API:</label>
-                            <input type="text" name="ContentList[${index}].API">
-                        </div>
-                    </div>
-                </div>
-            `;
-
-        contentFields.appendChild(newFieldsContainer);
-        index++;
-    }
-
-    function showInputField(selectElement) {
-        var index = selectElement.name.match(/\d+/)[0];
-        var inputField = document.getElementById(`inputField_${index}`);
-        var selectedValue = selectElement.value;
-
-        if (selectedValue === "image") {
-            inputField.style.display = "block";
-            inputField.querySelector("textarea").style.display = "none";
-            inputField.querySelector("input[type='text']").style.display = "none";
-            inputField.querySelector("input[type='file']").style.display = "block";
-        } else if (selectedValue === "paragraph") {
-            inputField.style.display = "block";
-            inputField.querySelector("textarea").style.display = "block";
-            inputField.querySelector("input[type='text']").style.display = "none";
-            inputField.querySelector("input[type='file']").style.display = "none";
-        } else if (selectedValue === "api") {
-            inputField.style.display = "block";
-            inputField.querySelector("textarea").style.display = "none";
-            inputField.querySelector("input[type='text']").style.display = "block";
-            inputField.querySelector("input[type='file']").style.display = "none";
-        } else {
-            inputField.style.display = "none";
-        }
-    }
-</script>
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>

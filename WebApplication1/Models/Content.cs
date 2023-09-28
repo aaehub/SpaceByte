@@ -16,5 +16,6 @@ namespace WebApplication1.Models
         public int ArticleID { get; set; }
         public Article Article { get; set; }
 
+
     }
 }

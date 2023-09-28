@@ -1,0 +1,105 @@
+﻿@model WebApplication1.Models.Content
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Content</h4>
+<hr />
+
+
+
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+@using (Html.BeginForm("Create", "contents", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="section">
+        <h3>Article Information</h3>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.ContentType)
+            <div id="contentTypeInputText">
+                @Html.RadioButtonFor(m => m.ContentType, "Text", new { @checked = "checked" }) Text
+            </div>
+            <div id="contentTypeInputFile">
+                @Html.RadioButtonFor(m => m.ContentType, "File") File
+                <input type="file" name="ArticleFile" accept="image/*" style="display: none;" />
+            </div>
+        </div>
+
+        <div id="contentInputText" class="form-group">
+            @Html.LabelFor(m => m.content)
+            @Html.TextBoxFor(m => m.content, new { @class = "form-control" })
+        </div>
+        <div id="contentInputText" class="form-group">
+            @Html.LabelFor(m => m.OrderNumber)
+            @Html.TextBoxFor(m => m.OrderNumber, new { @class = "form-control", type = "number" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ArticleID, new { @class = "control-label" })
+            @Html.DropDownList("ArticleID", ViewData["ArticleID"] as SelectList, "-- Select ArticleID --", new { @class = "form-control" })
+        </div>
+        @Html.LabelFor(m => m.ContentType)
+        @Html.DropDownListFor(m => m.ContentType, new SelectList(new[]
+    {
+    new SelectListItem { Text = "Paragraph", Value = "Paragraph" },
+    new SelectListItem { Text = "Image", Value = "Image" },
+    new SelectListItem { Text = "API", Value = "API" }
+    }, "Value", "Text"), "-- Select Content Type --", new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        <input id="toggleContentButton" type="button" value="Toggle Content" class="btn btn-primary" />
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#toggleContentButton").click(function () {
+            var contentType = $("input[name='ContentType']:checked").val();
+
+            if (contentType === "Text") {
+                $("#contentInputText").show();
+                $("#contentTypeInputFile input[type='file']").hide();
+            } else {
+                $("#contentInputText").hide();
+                $("#contentTypeInputFile input[type='file']").show();
+            }
+        });
+    });
+</script>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

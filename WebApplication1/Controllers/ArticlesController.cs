@@ -314,21 +314,7 @@ namespace WebApplication1.Controllers
                     article.Content = "/images/" + uniqueFileName;
                 }
 
-                // Add each content item to the article
-                foreach (var content in model.ContentList)
-                {
-                    var newContent = new Content
-                    {
-                        ArticleID = article.ArticleID,
-                        Article = article,
-                        OrderNumber = content.OrderNumber,
-                        content = content.content,
-                        ContentType = content.ContentType
-                    };
-
-                    article.ContentList.Add(newContent);
-                }
-
+                
                 _context.Article.Add(article);
                 _context.SaveChanges();
 
@@ -372,72 +358,6 @@ namespace WebApplication1.Controllers
 
 
 
-
-
-
-
-
-        //[HttpPost]
-        //public ActionResult Create(Article model, IFormFile ContentFile)
-        //{
-        //    string ss = HttpContext.Session.GetString("role");
-        //    if (ss == "admin")
-        //    {
-        //        string SAuthorID = HttpContext.Session.GetString("UserID");
-        //        int AuthorID = int.Parse(SAuthorID);
-
-        //        // Create a new Article entity
-        //        var article = new Article
-        //        {
-        //            Title = model.Title,
-        //            Description = model.Description,
-        //            Category = model.Category,
-        //            AuthorID = AuthorID,
-        //            PublicationDate = DateTime.Now,
-        //            ContentList = new List<Content>()
-        //        };
-
-        //        // Save the main article content image
-        //        if (ContentFile != null && ContentFile.Length > 0)
-        //        {
-        //            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-        //            string uniqueFileName = Guid.NewGuid().ToString() + "_" + ContentFile.FileName;
-        //            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-        //            using (var fileStream = new FileStream(filePath, FileMode.Create))
-        //            {
-        //                ContentFile.CopyTo(fileStream);
-        //            }
-
-        //            article.Content = "/images/" + uniqueFileName;
-        //        }
-
-        //        // Add each content item to the article
-        //        foreach (var content in model.ContentList)
-        //        {
-        //            var newContent = new Content
-        //            {
-        //                ArticleID = article.ArticleID,
-        //                Article = article,
-        //                OrderNumber = content.OrderNumber,
-        //                content = content.content,
-        //                ContentType = content.ContentType
-        //            };
-
-        //            article.ContentList.Add(newContent);
-        //        }
-
-        //        _context.Article.Add(article);
-        //        _context.SaveChanges();
-
-        //        return RedirectToAction("Details", new { id = article.ArticleID });
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("logout", "users");
-        //    }
-        //}
-
         [HttpGet]
 
         // GET: Articles/Delete/5
@@ -473,7 +393,7 @@ namespace WebApplication1.Controllers
         // POST: Articles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int ArticleID)
 
 
         {
@@ -485,7 +405,7 @@ namespace WebApplication1.Controllers
             {
                 return Problem("Entity set 'WebApplication1Context.Article'  is null.");
             }
-            var article = await _context.Article.FindAsync(id);
+            Article article = await _context.Article.FindAsync(ArticleID);
             if (article != null)
             {
                 _context.Article.Remove(article);
@@ -495,8 +415,8 @@ namespace WebApplication1.Controllers
                 SqlConnection conn1 = new SqlConnection(conStr);
 
                 string sql, sql2;
-                sql = "DELETE FROM Comment WHERE ArticleID = " + id + ";";
-                sql2 = "DELETE FROM Content WHERE ArticleID = " + id + ";";
+                sql = "DELETE FROM Comment WHERE ArticleID = " + ArticleID + ";";
+                sql2 = "DELETE FROM Content WHERE ArticleID = " + ArticleID + ";";
 
                 SqlCommand comm = new SqlCommand(sql, conn1);
                 conn1.Open();
