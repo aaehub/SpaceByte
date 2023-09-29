@@ -26,10 +26,10 @@
         <div class="form-group">
             @Html.LabelFor(m => m.ContentType)
             <div id="contentTypeInputText">
-                @Html.RadioButtonFor(m => m.ContentType, "Text", new { @checked = "checked" }) Text
+                @Html.RadioButtonFor(m => m.ContentType, "Paragraph", new { @checked = "checked" }) Text
             </div>
             <div id="contentTypeInputFile">
-                @Html.RadioButtonFor(m => m.ContentType, "File") File
+                @Html.RadioButtonFor(m => m.ContentType, "Image") File
                 <input type="file" name="ArticleFile" accept="image/*" style="display: none;" />
             </div>
         </div>
@@ -44,16 +44,9 @@
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.ArticleID, new { @class = "control-label" })
-            @Html.DropDownList("ArticleID", ViewData["ArticleID"] as SelectList, "-- Select ArticleID --", new { @class = "form-control" })
+            @Html.TextBox("ArticleID", ViewData["ArticleID"], new { @class = "form-control" })
         </div>
-        @Html.LabelFor(m => m.ContentType)
-        @Html.DropDownListFor(m => m.ContentType, new SelectList(new[]
-    {
-    new SelectListItem { Text = "Paragraph", Value = "Paragraph" },
-    new SelectListItem { Text = "Image", Value = "Image" },
-    new SelectListItem { Text = "API", Value = "API" }
-    }, "Value", "Text"), "-- Select Content Type --", new { @class = "form-control" })
-
+     
     </div>
 
     <div class="form-group">

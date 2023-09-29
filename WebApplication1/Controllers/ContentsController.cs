@@ -53,10 +53,7 @@ namespace WebApplication1.Controllers
             {
                 ViewData["ArticleID"] = id;
             }
-            else
-            {
-                ViewData["ArticleID"] = new SelectList(_context.Article, "ArticleID", "ArticleID");
-            }
+           
 
             return View();
         }
@@ -81,16 +78,15 @@ namespace WebApplication1.Controllers
                 OrderNumber = model.OrderNumber,
                 content = model.content,
                 ContentType = model.ContentType,
-                ArticleID = model.ArticleID
+                ArticleID = model.ArticleID,
+               
             };
 
-            // Save the content to the database
-            _context.Content.Add(content);
-            await _context.SaveChangesAsync();
 
-            // Save the article file
+    // Save the article file
             if (ArticleFile != null && ArticleFile.Length > 0)
             {
+
                 string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + ArticleFile.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -102,14 +98,24 @@ namespace WebApplication1.Controllers
 
                 // Update the content with the image file path
                 content.content = "/images/" + uniqueFileName;
+               
                 await _context.SaveChangesAsync();
             }
+
+
+
+
+            // Save the content to the database
+            _context.Content.Add(content);
+            await _context.SaveChangesAsync();
+
+        
 
 
             ViewData["ArticleID"] = new SelectList(_context.Article, "ArticleID", "ArticleID", model.ArticleID);
 
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Create");
 
         }
 
