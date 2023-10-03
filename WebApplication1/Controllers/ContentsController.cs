@@ -22,40 +22,75 @@ namespace WebApplication1.Controllers
         // GET: Contents
         public async Task<IActionResult> Index()
         {
-            var webApplication1Context = _context.Content.Include(c => c.Article);
-            return View(await webApplication1Context.ToListAsync());
+            string ss = HttpContext.Session.GetString("role");
+            if (ss == "admin")
+            {
+
+                var webApplication1Context = _context.Content.Include(c => c.Article);
+                return View(await webApplication1Context.ToListAsync());
+            }
+            else
+            {
+
+                return RedirectToAction("logout", "users");
+
+            }
         }
 
         // GET: Contents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Content == null)
-            {
-                return NotFound();
-            }
 
-            var content = await _context.Content
-                .Include(c => c.Article)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (content == null)
-            {
-                return NotFound();
-            }
 
-            return View(content);
+            string ss = HttpContext.Session.GetString("role");
+            if (ss == "admin")
+            {
+
+                if (id == null || _context.Content == null)
+                {
+                    return NotFound();
+                }
+
+                var content = await _context.Content
+                    .Include(c => c.Article)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (content == null)
+                {
+                    return NotFound();
+                }
+
+                return View(content);
+            }
+            else
+            {
+
+                return RedirectToAction("logout", "users");
+
+            }
         }
 
         // GET: Contents/Create
         // GET: Contents/Create
         public IActionResult Create(int? id)
         {
-            if (id != null)
+            string ss = HttpContext.Session.GetString("role");
+            if (ss == "admin")
             {
-                ViewData["ArticleID"] = id;
-            }
-           
 
-            return View();
+                if (id != null)
+                {
+                    ViewData["ArticleID"] = id;
+                }
+
+
+                return View();
+            }
+            else
+            {
+
+                return RedirectToAction("logout", "users");
+
+            }
         }
 
 
@@ -70,53 +105,64 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Content model, IFormFile ArticleFile)
         {
-
-            // Create a new Content entity
-            var content = new Content
-            {
-                Article = model.Article,
-                OrderNumber = model.OrderNumber,
-                content = model.content,
-                ContentType = model.ContentType,
-                ArticleID = model.ArticleID,
-               
-            };
-
-
-    // Save the article file
-            if (ArticleFile != null && ArticleFile.Length > 0)
+            string ss = HttpContext.Session.GetString("role");
+            if (ss == "admin")
             {
 
-                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + ArticleFile.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+
+                // Create a new Content entity
+                var content = new Content
                 {
-                    ArticleFile.CopyTo(fileStream);
+                    Article = model.Article,
+                    OrderNumber = model.OrderNumber,
+                    content = model.content,
+                    ContentType = model.ContentType,
+                    ArticleID = model.ArticleID,
+
+                };
+
+
+                // Save the article file
+                if (ArticleFile != null && ArticleFile.Length > 0)
+                {
+
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + ArticleFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        ArticleFile.CopyTo(fileStream);
+                    }
+
+                    // Update the content with the image file path
+                    content.content = "/images/" + uniqueFileName;
+
+                    await _context.SaveChangesAsync();
                 }
 
-                // Update the content with the image file path
-                content.content = "/images/" + uniqueFileName;
-               
+
+
+
+                // Save the content to the database
+                _context.Content.Add(content);
                 await _context.SaveChangesAsync();
+
+
+
+
+                ViewData["ArticleID"] = new SelectList(_context.Article, "ArticleID", "ArticleID", model.ArticleID);
+
+
+                return RedirectToAction("Create");
             }
+            else
+            {
 
+                return RedirectToAction("logout", "users");
 
-
-
-            // Save the content to the database
-            _context.Content.Add(content);
-            await _context.SaveChangesAsync();
-
-        
-
-
-            ViewData["ArticleID"] = new SelectList(_context.Article, "ArticleID", "ArticleID", model.ArticleID);
-
-
-            return RedirectToAction("Create");
-
+            }
         }
 
 
@@ -126,20 +172,35 @@ namespace WebApplication1.Controllers
         // GET: Contents/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Content == null)
+            string ss = HttpContext.Session.GetString("role");
+            if (ss == "admin")
             {
-                return NotFound();
+
+
+                if (id == null || _context.Content == null)
+                {
+                    return NotFound();
+                }
+
+                var content = await _context.Content
+                    .Include(c => c.Article)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (content == null)
+                {
+                    return NotFound();
+                }
+
+                return View(content);
+
+
+            }
+            else
+            {
+
+                return RedirectToAction("logout", "users");
+
             }
 
-            var content = await _context.Content
-                .Include(c => c.Article)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (content == null)
-            {
-                return NotFound();
-            }
-
-            return View(content);
         }
 
         // POST: Contents/Delete/5
@@ -147,81 +208,40 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Content == null)
-            {
-                return Problem("Entity set 'WebApplication1Context.Content'  is null.");
-            }
-            var content = await _context.Content.FindAsync(id);
-            if (content != null)
-            {
-                _context.Content.Remove(content);
-            }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            string ss = HttpContext.Session.GetString("role");
+            if (ss == "admin")
+            {
+
+                if (_context.Content == null)
+                {
+                    return Problem("Entity set 'WebApplication1Context.Content'  is null.");
+                }
+                var content = await _context.Content.FindAsync(id);
+                if (content != null)
+                {
+                    _context.Content.Remove(content);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+
+
+            }
+            else
+            {
+
+                return RedirectToAction("logout", "users");
+
+            }
         }
 
         private bool ContentExists(int id)
         {
             return (_context.Content?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-    
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // POST: Contents/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderNumber,content,ContentType,ArticleID")] Content content)
-        {
-            if (id != content.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(content);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ContentExists(content.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ArticleID"] = new SelectList(_context.Article, "ArticleID", "ArticleID", content.ArticleID);
-            return View(content);
-        }
-
-
-
-
-        
     }
 }

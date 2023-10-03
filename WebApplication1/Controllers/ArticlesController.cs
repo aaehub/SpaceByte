@@ -33,8 +33,50 @@ namespace WebApplication1.Controllers
             _context = context;
         }
 
-        // GET: Articles
-        public async Task<IActionResult> Index()
+
+
+
+
+        public async Task<IActionResult> search()
+        {
+
+
+            ViewData["role"] = HttpContext.Session.GetString("role");
+            List<Article> brItems = new List<Article>();
+
+
+
+
+            return View(brItems);
+
+
+
+
+
+        }
+
+
+        // POST: items/search
+        [HttpPost]
+        public async Task<IActionResult> Search(string s)
+        {
+            ViewData["role"] = HttpContext.Session.GetString("role");
+            var brItems = await _context.Article.FromSqlRaw("select * from article where Title LIKE '%" + s + "%' ").ToListAsync();
+
+            return View(brItems);
+        }
+
+
+
+
+
+
+
+
+
+
+            // GET: Articles
+            public async Task<IActionResult> Index()
         {
 
             string ss = HttpContext.Session.GetString("role"); if (ss == "admin")

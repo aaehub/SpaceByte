@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -99,12 +101,15 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserID,Username,Email,Password,Gender,Role,DateCreated")] User user)
         {
-            if (ModelState.IsValid)
-            {
+
+            user.DateCreated = DateTime.Now;
+
+
+           
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
+            
             return View(user);
         }
         public async Task<IActionResult> Edit(int? id)
@@ -141,19 +146,22 @@ namespace WebApplication1.Controllers
      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID,Username,Email,Password,Gender,Role,DateCreated")] User user)
+        public async Task<IActionResult> Edit(int UserID, [Bind("UserID,Username,Email,Password,Gender,Role")] User user)
         {
 
             string ss = HttpContext.Session.GetString("role"); if (ss == "admin"){
-                if (id != user.UserID)
+                if (UserID != user.UserID)
                 {
                     return NotFound();
                 }
 
-                if (ModelState.IsValid)
-                {
+                user.DateCreated= DateTime.Now;
+
+
+
                     try
                     {
+                        
                         _context.Update(user);
                         await _context.SaveChangesAsync();
                     }
@@ -168,8 +176,7 @@ namespace WebApplication1.Controllers
                             throw;
                         }
                     }
-                    return RedirectToAction(nameof(Index));
-                }
+              
                 return View(user);
             }else{ return RedirectToAction("logout", "users");}
 
@@ -201,7 +208,7 @@ namespace WebApplication1.Controllers
     
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int UserID)
         {
 
             string ss = HttpContext.Session.GetString("role"); if (ss == "admin") { 
@@ -209,7 +216,7 @@ namespace WebApplication1.Controllers
             {
                 return Problem("Entity set 'WebApplication1Context.User'  is null.");
             }
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.User.FindAsync(UserID);
             if (user != null)
             {
                 _context.User.Remove(user);
@@ -408,8 +415,48 @@ namespace WebApplication1.Controllers
                 await _context.SaveChangesAsync();
                 //   HttpContext.Session.SetString("Id", Convert.ToString(myusers.Id));
                 conn.Close();
-                return RedirectToAction("logout", "users");
+
+
+
+
+
+
+
+
+
+
+                SmtpClient smtpClient = new SmtpClient("smtp-mail.outlook.com", 587);
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.Credentials = new NetworkCredential("your-email@example.com", "your-password");
+                smtpClient.EnableSsl = true;
+
+                // Create the email message
+                MailMessage mailMessage = new MailMessage();
+                mailMessage.From = new MailAddress("your-email@example.com");
+                mailMessage.To.Add(myusers.Email);
+                mailMessage.Subject = "Email verfication";
+                mailMessage.Body = "1234";
+
+                // Send the email
+                smtpClient.Send(mailMessage);
+
+             
             }
+           
+
+
+
+
+
+
+
+
+
+
+
+
+                return RedirectToAction("logout", "users");
+            
           
 
 

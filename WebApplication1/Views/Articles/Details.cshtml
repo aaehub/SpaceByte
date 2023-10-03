@@ -3,210 +3,242 @@
 @{
     ViewData["Title"] = "Details1";
 }
+<style>
+    .article-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-<h1>Details1</h1>
+    .article-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 
-<div>
-    <h4>Article</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AuthorID)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AuthorID)
-        </dd>
+    .article-image {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+        border-radius: 4px;
+    }
+</style>
 
-    </dl>
+<div class="article-container">
+    <h1 class="article-title">@Model.Title</h1>
+    <img src="@Model.Content" alt="Article Image" class="article-image" style="width: 50%; max-height: 400px;" />
 </div>
-<div>
-@*
-    <h1>CONTENTS </h1>
+
+<h1>Article</h1>
+<article>
+  
     @foreach (var std in @ViewData["contents"] as IList<Content>)
     {
-
-        if (@std.ContentType == "Image")
-        {
-
-            <h1>image</h1>
-
-            <img src="@std.content " width="500" height="600">
-            <br />
-            <hr>
-
-        }
-        if (@std.ContentType == "Video")
-        {
-
-
-
-
-
-            <source src="@std.content" type="video/mp4">
-            <h1>vid</h1>
-            <br />
-            <hr>
-        }
-        if (@std.ContentType == "Paragraph")
-        {
-
-            if (@std.content.Contains("-"))
+        <div>
+            @if (std.ContentType == "Image")
             {
-                <h1>@std.content</h1>
+                <style>
+                    .image-container {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 20%;
+                        margin: 0 auto;
+                        border: 1px solid #ccc;
+                    }
 
+                        .image-container img {
+                            min-width: 100%;
+                            height: auto;
+                        }
+                </style>
+
+                <div class="image-container">
+                   
+                    <img src="@std.content" alt="Image" />
+                </div>
             }
-            else
-
-                @std.content
-
-            <br />
-            <hr>
-
-        }
-        if (@std.ContentType == "media")
-        {
-
-
-            <iframe> @std.content</iframe>
-
-
-            <h1>API</h1>
-            <br />
-
-            <hr>
-        }
-
-    }
-*@
-
-
-    <h1>CONTENTS</h1>
-    @foreach (var std in @ViewData["contents"] as IList<Content>)
-    {
-        if (std.ContentType == "Image")
-        {
-            <h1>Image</h1>
-            <img src="@std.content" width="500" height="600" />
-            <br />
-            <hr>
-        }
-       @* else if (std.ContentType == "Video")
-        {
-            <h1>Video</h1>
-            <video width="500" height="600" controls>
-                <source src="@std.content" type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>
-            <br />
-            <hr>
-        }*@
-        else if (std.ContentType == "Paragraph")
-        {
-            if (std.content.Contains("-"))
+            else if (std.ContentType == "Video")
             {
-                <h1>@std.content</h1>
+                <h2>Video</h2>
+                <video width="500" height="600" controls>
+                    <source src="@std.content" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
             }
-            else
+            else if (std.ContentType == "Paragraph")
             {
-                @Html.Raw(std.content)
+                if (std.content.Contains("-"))
+                {
+                    <h2>@std.content</h2>
+                }
+                else
+                {
+                    <p>@Html.Raw(std.content)</p>
+                }
             }
-            <br />
-            <hr>
-        }
-        else if (std.ContentType == "API")
-        {
-            <h1>API</h1>
-            <iframe src="@std.content"></iframe>
-            <br />
-            <hr>
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <form asp-action="CreateComment" style="border-top:solid;">
-        <br />
-        <label for="comment-text">add comment:</label>
-        <div class="row">
-            <div class="col-100" style="display:flex; justify-content:center;">
-
-
-
-
-
-                <textarea name="commenttext" rows="3"></textarea>
-                <button type="submit" class="btn btn-primary">Submit</button>
-
-            </div>
-            <br />
-            <div class="alert alert-info">
-                @TempData["Message"]
-            </div>
-            <input class="form-control" type="hidden" name="articleid" value=@Model.ArticleID />
-
-            <br />
-
-
+            else if (std.ContentType == "API")
+            {
+                <h2>API</h2>
+                <iframe src="@std.content"></iframe>
+            }
         </div>
-    </form>
-
+       
+    }
+</article>
 
     <h1>COMMENTS </h1>
     @foreach (var std in @ViewData["comments"] as IList<comments_details>)
     {
-        <ul>
-            <li style="background-color:white">
-                <div style="text-align:left; color:gray">
-                    @std.Comment_Text @std.username
-                </div>
+    <style>
+        .comments-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 4px;
+        }
 
-            </li>
+        .comment {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            list-style-type: none; /* Remove bullet point */
+        }
 
-        </ul>
+        .comment-text {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .comment-username {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #888;
+        }
+    </style>
+
+    <ul class="comments-section">
+        <li class="comment">
+            <div class="comment-text">
+                @std.Comment_Text
+            </div>
+            <div class="comment-username">
+                - @std.username
+            </div>
+        </li>
+    </ul>
     }
 
 
 
-  
+<form asp-action="CreateComment" style="border-top:solid;">
+
+    <style>
+        .comment-form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .comment-form label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            .comment-form textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                resize: vertical;
+                margin-bottom: 10px;
+                font-family: Arial, sans-serif;
+                height: 100px;
+            }
+
+            .comment-form .btn {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
+
+                .comment-form .btn:hover {
+                    background-color: #0056b3;
+                }
+
+            .comment-form .alert {
+                margin-top: 10px;
+                padding: 10px;
+                background-color: #f8f9fa;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                color: #6c757d;
+            }
+    </style>
+
+    <div class="comment-form">
+        <label for="comment-text">Add Comment:</label>
+        <textarea name="commenttext" rows="2" placeholder="Enter your comment"></textarea>
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="alert alert-info">
+            @TempData["Message"]
+        </div>
+        <input class="form-control" type="hidden" name="articleid" value="@Model.ArticleID" />
+    </div>
+</form>
+
+
+<style>
+    .link-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .link-container a {
+            display: inline-block;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: #333;
+            background-color: #f8f8f8;
+            transition: background-color 0.3s ease;
+        }
+
+            .link-container a:hover {
+                background-color: #e0e0e0;
+            }
+
+        .link-container .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            font-weight: bold;
+        }
+
+            .link-container .btn:hover {
+                background-color: #0056b3;
+            }
+</style>
+@{
+    var c = Context.Session.GetString("role");
+    if ((string)c == "admin")
+    {<div class="link-container">
     <a asp-action="Index">Back to List</a>
     <a asp-action="Create" asp-controller="contents" asp-route-id="@Model.ArticleID" class="btn btn-secondary">Create Content</a>
 </div>
+
+ }}
+
+
+
+
+

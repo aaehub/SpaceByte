@@ -14,6 +14,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="UserID" />
             <div class="form-group">
+                <label asp-for="UserID" class="control-label"></label>
+                <input asp-for="UserID" class="form-control" />
+                <span asp-validation-for="UserID" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
                 <input asp-for="Username" class="form-control" />
                 <span asp-validation-for="Username" class="text-danger"></span>
@@ -28,14 +34,31 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <input asp-for="Gender" class="form-control" />
+ <div class="form-group">
+                <label asp-for="Gender" class="control-label">Gender</label>
+                <div>
+                    <label>
+                        <input type="radio" asp-for="Gender" value="Male" /> Male
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Gender" value="Female" /> Female
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Gender" value="PreferNotToSay" /> Prefer Not to Say
+                    </label>
+                </div>
                 <span asp-validation-for="Gender" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <input asp-for="Role" class="form-control" />
+                <label asp-for="Role">Role</label>
+                <div>
+                    <label>
+                        <input type="radio" asp-for="Role" value="admin" /> Admin
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Role" value="user" /> User
+                    </label>
+                </div>
                 <span asp-validation-for="Role" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -43,11 +66,7 @@
                     <input class="form-check-input" asp-for="Status" /> @Html.DisplayNameFor(model => model.Status)
                 </label>
             </div>
-            <div class="form-group">
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
-            </div>
+           
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

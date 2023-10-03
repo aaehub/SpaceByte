@@ -1,102 +1,97 @@
 ﻿@model WebApplication1.Models.User
 
 @{
-    ViewData["Title"] = "register";
+    ViewData["Title"] = "Register";
+    Layout = null;
 }
 
-
-<script>
-
-    function VP() {
-        var pass1 = document.getElementById("Password").value;
-        var pass2 = document.getElementById("pass2").value;
-        //check empty password field
-        if (pass1.value == pass2.value) {
-            if (pass1 == pass2) {
-                document.getElementById("rb").disabled = false;
-            } else {
-                document.getElementById("rb").disabled = true;
-                document.getElementById("message").innerHTML = "wrong conformation";
-
-            }
-        }
-    }
-
-</script>
-
+<!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - WebApplication1</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
 </head>
 <body>
-    <h1>Register</h1>
-
-    <h4>User</h4>
-    <hr />
-
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="register">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Username" class="control-label"></label>
-                    <input asp-for="Username" required class="form-control" />
-                    <span asp-validation-for="Username" class="text-danger"></span>
-                </div>
-               
-                <p style="color: red"> @ViewData["message"]</p>
-               
-                <div class="form-group">
-                    <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" required class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Password" class="control-label"></label>
-                    <input type="password" required minlength="8" onchange="VP()" asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password"  class="text-danger"></span>
-                </div>
 
 
-                <div class="form-group">
-                    <label asp-for="Password" class="control-label"></label>
-                    <input type="password" onchange="VP()" required minlength="8" id="pass2" class="form-control" />
-                    <span class="text-danger"></span>
-                </div>
-     
+    <div class="container">
+        <div class="container d-flex align-items-center justify-content-center" style="min-height: 70vh">
+            <div class="col-md-6">
+                <div class="card">
+                    <h5 class="card-header text-center">Register</h5>
+                    <div class="card-body">
+                        <form asp-action="register">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-
-
-                <div class="form-group">
-                    <div class="form-group">
-                        <div>
-                            <label asp-for="Gender"  class="control-label">Gender</label>
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox" >
-                                <label> <input type="radio" asp-for="Gender" value="male" id="rm" /> Male</label>
+                            <div class="form-group">
+                                <label asp-for="Username">Username</label>
+                                <input asp-for="Username"  class="form-control" required />
+                                <span asp-validation-for="Username" class="text-danger"></span>
                             </div>
-                            <div class="checkbox">
-                                <label> <input type="radio" asp-for="Gender" value="female" id="rf" /> Female</label>
+
+                            <p class="text-danger">@ViewData["message"]</p>
+
+                            <div class="form-group">
+                                <label asp-for="Email">Email</label>
+                                <input asp-for="Email" required class="form-control"  />
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
-                            <span asp-validation-for="Gender"  class="text-danger"></span>
-                        </div>
+
+                            <div class="form-group">
+                                <label asp-for="Password">Password</label>
+                                <input type="password" required minlength="8" onchange="validatePassword()" asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                <input type="password" onchange="validatePassword()" required minlength="8" id="pass2" class="form-control" />
+                                <span style="color: red;" id="message"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <div class="form-check">
+                                    <input type="radio" asp-for="Gender" value="male" id="rm" class="form-check-input" />
+                                    <label for="rm" class="form-check-label">Male</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" asp-for="Gender" value="female" id="rf" class="form-check-input" />
+                                    <label for="rf" class="form-check-label">Female</label>
+                                </div>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+                            <div class="text-center">
+                            <div class="form-group">
+                                <input type="submit" disabled id="rb" value="Create" class="btn btn-primary" />
+                            </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="form-group">
-                    <input type="submit" disabled id="rb" value="Create" class="btn btn-primary" />
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <script>
+        function validatePassword() {
+            var pass1 = document.getElementById("Password").value;
+            var pass2 = document.getElementById("pass2").value;
+
+            if (pass1 === pass2) {
+                document.getElementById("rb").disabled = false;
+                document.getElementById("message").innerHTML = "";
+            } else {
+                document.getElementById("rb").disabled = true;
+                document.getElementById("message").innerHTML = "Wrong confirmation";
+            }
+        }
+    </script>
 </body>
 </html>
-@section Scripts {
-    @{
-        await
-    Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
- }

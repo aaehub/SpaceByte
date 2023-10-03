@@ -4,33 +4,29 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Create Content</h1>
 
-<h4>Content</h4>
 <hr />
-
-
-
-
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
 @using (Html.BeginForm("Create", "contents", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="section">
-        <h3>Article Information</h3>
+      
 
         <div class="form-group">
             @Html.LabelFor(m => m.ContentType)
             <div id="contentTypeInputText">
-                @Html.RadioButtonFor(m => m.ContentType, "Paragraph", new { @checked = "checked" }) Text
+                @Html.RadioButtonFor(m => m.ContentType, "Paragraph", new { @checked = "checked" }) Paragraph
             </div>
             <div id="contentTypeInputFile">
                 @Html.RadioButtonFor(m => m.ContentType, "Image") File
                 <input type="file" name="ArticleFile" accept="image/*" style="display: none;" />
+            </div>
+            <div id="contentTypeInputText">
+                @Html.RadioButtonFor(m => m.ContentType, "API") API
             </div>
         </div>
 
@@ -48,13 +44,43 @@
         </div>
      
     </div>
+    <style>
+        .form-group {
+            margin-bottom: 1rem;
+        }
 
-    <div class="form-group">
-        <input id="toggleContentButton" type="button" value="Toggle Content" class="btn btn-primary" />
-    </div>
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
 
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
+            .btn-primary:hover {
+                background-color: #0069d9;
+            }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+            .container .form-group {
+                flex-basis: 48%;
+            }
+    </style>
+
+    <div class="container">
+        <div class="form-group">
+            <input id="toggleContentButton" type="button" value="Toggle Content" class="btn btn-primary" />
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
     </div>
 }
 
@@ -64,35 +90,18 @@
         $("#toggleContentButton").click(function () {
             var contentType = $("input[name='ContentType']:checked").val();
 
-            if (contentType === "Text") {
+            if (contentType === "Paragraph") {
                 $("#contentInputText").show();
                 $("#contentTypeInputFile input[type='file']").hide();
-            } else {
+            } else if (contentType==="Image"){
                 $("#contentInputText").hide();
                 $("#contentTypeInputFile input[type='file']").show();
+            } else if(contentType==="API"){
+                $("#contentInputText").show();
+                $("#contentTypeInputFile input[type='file']").hide();
+
             }
         });
     });
 </script>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 

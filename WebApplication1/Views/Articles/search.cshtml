@@ -1,0 +1,69 @@
+﻿@model IEnumerable<WebApplication1.Models.Article>
+
+@{
+    ViewData["Title"] = "article";
+}
+
+<style>
+    .table-container {
+        text-align: center;
+        margin: 20px auto;
+        width: 80%;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        border: solid 1px;
+    }
+
+    a {
+        margin: 6px;
+    }
+</style>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Descriptoin</th>
+                <th>Category</th>
+                <th>Author ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Description</td>
+                    <td>@item.Category</td>
+                    <td>@item.AuthorID</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.ArticleID">Details</a>
+
+                        @{
+                            var c = Context.Session.GetString("role");
+                            if ((string)c == "admin")
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.ArticleID">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@item.ArticleID">Delete</a>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

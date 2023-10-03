@@ -28,16 +28,33 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <input asp-for="Gender" class="form-control" />
+                <label asp-for="Gender" class="control-label">Gender</label>
+                <div>
+                    <label>
+                        <input type="radio" asp-for="Gender" value="Male" /> Male
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Gender" value="Female" /> Female
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Gender" value="PreferNotToSay" /> Prefer Not to Say
+                    </label>
+                </div>
                 <span asp-validation-for="Gender" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <input asp-for="Role" class="form-control" />
+                <label asp-for="Role">Role</label>
+                <div>
+                    <label>
+                        <input type="radio" asp-for="Role" value="admin" /> Admin
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Role" value="user" /> User
+                    </label>
+                </div>
                 <span asp-validation-for="Role" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display: none;">
                 <label asp-for="DateCreated" class="control-label"></label>
                 <input asp-for="DateCreated" class="form-control" />
                 <span asp-validation-for="DateCreated" class="text-danger"></span>
