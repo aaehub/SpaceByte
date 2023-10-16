@@ -1,146 +1,151 @@
-﻿@model List<Article>
+@page
+@model YourNamespace.YourModel
 
-<h1>Customer Home</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Space Byte</title>
+    <link rel="icon" href="favicon.svg">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="~/WebApplication1.styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+</head>
 
-<div class="card-container">
-    <div class="card card-large">
-        @if (Model.Count > 0)
-        {
-            var firstArticle = Model[0];
-            <h2>@firstArticle.Title</h2>
-            <img src="@firstArticle.Content" alt="@firstArticle.Title" />
-            <p>@firstArticle.Description</p>
-            <p><strong>Category:</strong> @firstArticle.Category</p>
-            <p><strong>Publication Date:</strong> @firstArticle.PublicationDate.ToShortDateString()</p>
-        }
-    </div>
-    <div class="card card-small-group">
-        @if (Model.Count > 1)
-        {
-            var secondArticle = Model[1];
-            <div class="card card-small">
-                <h2>@secondArticle.Title</h2>
-                <img src="@secondArticle.Content" alt="@secondArticle.Title" />
-                <p>@secondArticle.Description</p>
-                <p><strong>Category:</strong> @secondArticle.Category</p>
-                <p><strong>Publication Date:</strong> @secondArticle.PublicationDate.ToShortDateString()</p>
-            </div>
-        }
-        @if (Model.Count > 2)
-        {
-            
-             
-            
+<body>
 
+    <!-- Navigation Bar -->
+    <header>
+        <a href="#" class="logo">Space Byte</a>
+        <div class="menuToggle"></div>
+    </header>
+    <ul class="navigation">
+        <li><a href="#" onclick="toggleMenu();">Home</a></li>
+        <li><a href="#" onclick="toggleMenu();">News</a></li>
+        <li><a href="#" onclick="toggleMenu();">Opinion</a></li>
+        <li><a href="#" onclick="toggleMenu();">Military</a></li>
+        <li><a href="#" onclick="toggleMenu();">Launch</a></li>
+        <li><a href="#" onclick="toggleMenu();">Commercial</a></li>
+        <li><a href="#" onclick="toggleMenu();">Sponsored</a></li>
+        <li><a href="#" onclick="toggleMenu();">Advertise</a></li>
+    </ul>
 
-
-
-
-            var thirdArticle = Model[2];
-            <div class="card card-small">
-                <h2>@thirdArticle.Title</h2>
-        <div class="image-container">
-                <img src="@thirdArticle.Content" alt="@thirdArticle.Title" />
-            </div>
-                <p>@thirdArticle.Description</p>
-                <p><strong>Category:</strong> @thirdArticle.Category</p>
-                <p><strong>Publication Date:</strong> @thirdArticle.PublicationDate.ToShortDateString()</p>
-            </div>
-        }
-    </div>
-</div>
-
-@if (Model.Count > 3)
-{
-    <div class="article-list">
-        <h2>Other Articles</h2>
-        <div class="card-row-container">
-            @for (int i = 3; i < Model.Count; i += 2)
+    <section class="post" id="post">
+        <div class="title">
+            <h2>Latest Post</h2>
+            <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloremque autem totam dolorum fuga quasi deleniti voluptatibus nam. Atque accusantium ipsa, dignissimos, mollitia dolores temporibus illo maxime rerum eligendi impedit ad!
+            </p>
+        </div>
+        <div class="grid-container">
+            @for (int i = 1; i <= 4; i++)
             {
-                var article1 = Model[i];
-                var article2 = (i + 1 < Model.Count) ? Model[i + 1] : null;
-                <div class="card-row">
-                    <div class="card card-small">
-                        <h2>@article1.Title</h2>
-                        <img src="@article1.Content" alt="@article1.Title" />
-                        <p>@article1.Description</p>
-                        <p><strong>Category:</strong> @article1.Category</p>
-                        <p><strong>Publication Date:</strong> @article1.PublicationDate.ToShortDateString()</p>
+                <div class="grid-item">
+                    <img src="@(i).jpg" alt="Image @(i)">
+                    <div class="overlay">
+                        <h3 class="heading">
+                            Why is space dark?
+                        </h3>
+                        <h5 class="desc" id="desc">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, asperiores atque, repudiandae quia iure impedit officia maxime labore maiores aliquid animi ut? Magnam molestias, amet minima temporibus corporis distinctio ratione.
+                        </h5>
+                        <a href="https://en.wikipedia.org/wiki/Paratha" target="_blank" class="btn" id="btn">Read More</a>
                     </div>
-                    @if (article2 != null)
-                    {
-                        <div class="card card-small">
-                            <h2>@article2.Title</h2>
-                            <img src="@article2.Content" alt="@article2.Title" />
-                            <p>@article2.Description</p>
-                            <p><strong>Category:</strong> @article2.Category</p>
-                            <p><strong>Publication Date:</strong> @article2.PublicationDate.ToShortDateString()</p>
-                        </div>
-                    }
                 </div>
             }
         </div>
-    </div>
-}
+        <div class="title">
+            <a href="index.html" target="_blank" class="btn mgt60">Show all</a>
+        </div>
+    </section>
 
-<style>
-    .card-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
+    <footer>
+        <div class="footer">
+            <div class="row">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+                <a href="#"><i class="fa fa-youtube"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+            </div>
+            <div class="row">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Opinion</a></li>
+                    <li><a href="#">Military</a></li>
+                    <li><a href="#">Launch</a></li>
+                    <li><a href="#">Commercial</a></li>
+                    <li><a href="#">Sponsored</a></li>
+                    <li><a href="#">Advertise</a></li>
+                </ul>
+            </div>
+            <div class="row">
+                Space Byte © @DateTime.Now.Year - All rights reserved
+            </div>
+        </div>
+    </footer>
+</body>
+
+<script>
+    const menuToggle = document.querySelector('.menuToggle');
+    const navigation = document.querySelector('.navigation');
+    menuToggle.onclick = function () {
+        menuToggle.classList.toggle('active');
+        navigation.classList.toggle('active');
     }
 
-    .card {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    window.addEventListener('scroll', function () {
+        const header = document.querySelector('header');
+        header.classList.toggle('sticky', window.scrollY > 0);
+    })
+
+    function toggleMenu() {
+        menuToggle.classList.remove('active');
+        navigation.classList.remove('active');
     }
 
-    .card-large {
-        flex: 1;
+    let overlays = document.querySelectorAll('.overlay');
+
+    overlays.forEach((overlay) => {
+        let h5 = overlay.querySelector('.desc');
+        let h3 = overlay.querySelector('.heading');
+        let button = overlay.querySelector('.btn');
+
+        overlay.addEventListener('mouseover', () => handleHover(h3, h5, button));
+        overlay.addEventListener('mouseleave', () => handleMouseLeave(h3, h5, button));
+    });
+
+    function handleHover(h3, h5, button) {
+        h3.style.top = '0px';
+        h3.style.transition = 'all 0.25s ease-in-out';
+        h5.style.visibility = 'visible';
+        h5.style.opacity = '1';
+        button.style.visibility = 'visible';
+        button.style.opacity = '1';
+        h5.style.fontSize = '0.8em';
+        h5.style.transition = 'all 0.5s ease-in-out';
+        button.style.transition = 'all 0.5s ease-in-out';
+        h5.style.bottom = '0';
+        button.style.bottom = '0';
     }
 
-    .card-small-group {
-        flex: 1;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
+    function handleMouseLeave(h3, h5, button) {
+        h3.style.top = '100px';
+        h3.style.transition = 'all 0.75s ease-in-out';
+        h5.style.visibility = 'hidden';
+        h5.style.opacity = '0';
+        button.style.visibility = 'hidden';
+        button.style.opacity = '0';
+        h5.style.transition = 'all 0.5s ease-in-out';
+        button.style.transition = 'all 0.5s ease-in-out';
+        h5.style.bottom = '-100%';
+        button.style.bottom = '-100%';
     }
-
-    .card-small {
-        flex-basis: calc(50% - 10px);
-    }
-
-    .card h2 {
-        margin-top: 0;
-    }
-
-    .card img {
-        width: 100%;
-        height: auto;
-        margin-bottom: 10px;
-    }
-
-    .article-list {
-        margin-top: 20px;
-    }
-
-        .article-list h2 {
-            margin-bottom: 10px;
-        }
-
-    .card-row-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-
-    .card-row {
-        display: flex;
-        gap: 20px;
-        flex-basis: calc(50% - 10px);
-    }
-</style>
-In the provided code, I have made the necessary modifications to use the `Url.Content` method for generating the correct URLs for the image sources. Please replace the respective lines in your code with the modified code snippet above.
+</script>
+</html>
